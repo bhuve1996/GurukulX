@@ -1,0 +1,11 @@
+---
+description: Config and env - single source of truth; no scattered process.env in app code
+globs: lib/config/**/*.ts
+alwaysApply: false
+---
+
+# Config Layer
+
+- All runtime configuration (env, feature flags, adapter choice) is read and exported from `lib/config`. App and data layer import config from here; avoid `process.env` elsewhere.
+- Validate required config at startup or first access and fail fast with clear errors.
+- Use typed config objects so changing a key or default is a single edit.

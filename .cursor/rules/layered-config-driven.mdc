@@ -1,0 +1,41 @@
+---
+description: Core architecture - layered and config-driven; DB/config changes require no architectural change
+alwaysApply: true
+---
+
+# Layered & Config-Driven Architecture
+
+Everything must be **layered** and **config-driven**. Changing database (e.g. Supabase → Prisma/Postgres) or feature flags must be a **small, local change** (config + adapter), not an architectural rewrite.
+
+## Rules
+
+1. **No direct DB/client in UI or routes**  
+   Pages, components, and API route handlers must not import Supabase/client or any DB SDK directly. They use **services** or **repositories** provided by the data layer.
+
+2. **Config drives behavior**  
+   Environment, feature flags, and "which implementation" (e.g. which data adapter) live in `lib/config`. Code reads from config, not from hardcoded values or direct env access in business logic.
+
+3. **Data layer is swappable**  
+   - **Interfaces** in `lib/data/types.ts` (or per-domain) define what the app needs (e.g. `getUser`, `getTracks`, `saveBookmark`).  
+   - **Adapters** in `lib/data/adapters/<provider>/` implement those interfaces (e.g. `supabase`, `prisma`).  
+   - **One place** (config or factory in `lib/data`) chooses the adapter. Switching DB = new adapter + config change; no changes in app/, components/, or services.
+
+4. **Layers**  
+   - **UI / App**: calls services or repository facade only.  
+   - **Services** (optional): orchestrate repos, no DB specifics.  
+   - **Data**: interfaces + adapters; only this layer knows the actual DB.
+
+## Example: switching DB
+
+```ts
+// ❌ BAD – UI imports Supabase
+import { createClient } from '@supabase/supabase-js';
+const { data } = await supabase.from('tracks').select();
+
+// ✅ GOOD – UI uses config-driven data layer
+import { getDataAdapter } from '@/lib/data';
+const adapter = getDataAdapter();
+const data = await adapter.tracks.list();
+```
+
+Config change only: e.g. `DATA_ADAPTER=prisma` and add `lib/data/adapters/prisma/` implementing the same interfaces.

@@ -1,0 +1,12 @@
+---
+description: Data layer conventions - interfaces and adapters; DB-agnostic
+globs: lib/data/**/*.ts
+alwaysApply: false
+---
+
+# Data Layer
+
+- **Types / interfaces** live in `lib/data/types/` or `lib/data/types.ts`. Define method contracts (e.g. `listTracks(): Promise<Track[]>`), not implementation details.
+- **Adapters** live in `lib/data/adapters/<name>/` (e.g. `supabase`, `prisma`). Each adapter implements the same interfaces. No adapter imports another adapter.
+- **Factory / registry**: One entry (e.g. `lib/data/index.ts`) reads config (e.g. `DATA_ADAPTER`) and returns the active adapter. Rest of the app imports from this entry only.
+- Keep adapter code focused on mapping between DB shape and app types; no business logic.
