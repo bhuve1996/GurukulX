@@ -111,6 +111,11 @@ export function SwipeableFeed({ feed, initialIndex = 0, completedIds = [] }: Pro
     [goNext, goPrev]
   );
 
+  const currentItem = feed.length > 0 ? feed[Math.min(index, feed.length - 1)] : null;
+  const contentUrl = currentItem ? getContentUrl(currentItem) : "";
+  const shareTitle = currentItem ? currentItem.item.title : "";
+  const handleShare = useShare(contentUrl, shareTitle);
+
   if (!feed.length) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center p-4">
@@ -124,9 +129,7 @@ export function SwipeableFeed({ feed, initialIndex = 0, completedIds = [] }: Pro
 
   const f = feed[index];
   const shortText = f.item.shortBody ?? f.item.body ?? "";
-  const contentUrl = getContentUrl(f);
   const isDone = completedSet.has(f.item.id);
-  const handleShare = useShare(contentUrl, f.item.title);
 
   return (
     <div
