@@ -3,7 +3,7 @@
  * No external DB; swap to Supabase via config.
  */
 
-import type { DataAdapter, Track, Phase, Topic, ContentItem } from "@/lib/data/types";
+import type { DataAdapter, Track, Phase, Topic, ContentItem, UserNote, UserSave, TopicComment } from "@/lib/data/types";
 
 const tracks: Track[] = [
   {
@@ -16,20 +16,20 @@ const tracks: Track[] = [
 ];
 
 const phases: Phase[] = [
-  { id: "1", trackId: "1", slug: "python", name: "Python", order: 0 },
-  { id: "2", trackId: "1", slug: "data", name: "Data", order: 1 },
-  { id: "3", trackId: "1", slug: "ml", name: "ML", order: 2 },
-  { id: "4", trackId: "1", slug: "deep-learning", name: "Deep Learning", order: 3 },
-  { id: "5", trackId: "1", slug: "nlp-genai", name: "NLP / LLMs / GenAI", order: 4 },
-  { id: "6", trackId: "1", slug: "computer-vision", name: "Computer Vision", order: 5 },
-  { id: "7", trackId: "1", slug: "deployment", name: "Deployment", order: 6 },
-  { id: "8", trackId: "1", slug: "mlops", name: "MLOps", order: 7 },
-  { id: "9", trackId: "1", slug: "capstone", name: "Capstone", order: 8 },
+  { id: "1", trackId: "1", slug: "python", name: "Python", order: 0, estimatedDays: 7 },
+  { id: "2", trackId: "1", slug: "data", name: "Data", order: 1, estimatedDays: 7 },
+  { id: "3", trackId: "1", slug: "ml", name: "ML", order: 2, estimatedDays: 14 },
+  { id: "4", trackId: "1", slug: "deep-learning", name: "Deep Learning", order: 3, estimatedDays: 14 },
+  { id: "5", trackId: "1", slug: "nlp-genai", name: "NLP / LLMs / GenAI", order: 4, estimatedDays: 14 },
+  { id: "6", trackId: "1", slug: "computer-vision", name: "Computer Vision", order: 5, estimatedDays: 7 },
+  { id: "7", trackId: "1", slug: "deployment", name: "Deployment", order: 6, estimatedDays: 5 },
+  { id: "8", trackId: "1", slug: "mlops", name: "MLOps", order: 7, estimatedDays: 7 },
+  { id: "9", trackId: "1", slug: "capstone", name: "Capstone", order: 8, estimatedDays: 14 },
 ];
 
 const topics: Topic[] = [
-  { id: "1", phaseId: "1", slug: "basics", name: "Basics", order: 0 },
-  { id: "2", phaseId: "1", slug: "libraries", name: "Libraries", order: 1 },
+  { id: "1", phaseId: "1", slug: "basics", name: "Basics", order: 0, estimatedDays: 3 },
+  { id: "2", phaseId: "1", slug: "libraries", name: "Libraries", order: 1, estimatedDays: 4 },
 ];
 
 const content: ContentItem[] = [
@@ -70,6 +70,16 @@ const content: ContentItem[] = [
 
 /** userId -> Set of completed itemIds */
 const progressStore = new Map<string, Set<string>>();
+/** (userId, itemId) -> UserNote */
+const notesStore = new Map<string, UserNote>();
+/** userId -> UserSave[] */
+const savesStore = new Map<string, UserSave[]>();
+const commentsStore: TopicComment[] = [];
+let commentIdCounter = 1;
+
+function noteKey(userId: string, itemId: string) {
+  return `${userId}:${itemId}`;
+}
 
 const memoryAdapter: DataAdapter = {
   tracks: {
@@ -79,10 +89,12 @@ const memoryAdapter: DataAdapter = {
   phases: {
     listByTrackId: async (trackId) =>
       phases.filter((p) => p.trackId === trackId).sort((a, b) => a.order - b.order),
+    getById: async (phaseId) => phases.find((p) => p.id === phaseId) ?? null,
   },
   topics: {
     listByPhaseId: async (phaseId) =>
       topics.filter((t) => t.phaseId === phaseId).sort((a, b) => a.order - b.order),
+    getById: async (topicId) => topics.find((t) => t.id === topicId) ?? null,
   },
   content: {
     listByTopicId: async (topicId) =>
@@ -104,6 +116,42 @@ const memoryAdapter: DataAdapter = {
       return content.filter((c) => c.topicId === topicId && set!.has(c.id)).map((c) => c.id);
     },
     isDone: async (userId, itemId) => progressStore.get(userId)?.has(itemId) ?? false,
+  },
+  notes: {
+    get: async (userId, itemId) => notesStore.get(noteKey(userId, itemId)) ?? null,
+    upsert: async (userId, itemId, body) => {
+      const key = noteKey(userId, itemId);
+      notesStore.set(key, { userId, itemId, body, updatedAt: new Date().toISOString() });
+    },
+  },
+  saves: {
+    add: async (userId, itemId) => {
+      const list = savesStore.get(userId) ?? [];
+      if (list.some((s) => s.itemId === itemId)) return;
+      list.push({ userId, itemId, savedAt: new Date().toISOString() });
+      savesStore.set(userId, list);
+    },
+    remove: async (userId, itemId) => {
+      const list = savesStore.get(userId) ?? [];
+      savesStore.set(userId, list.filter((s) => s.itemId !== itemId));
+    },
+    list: async (userId) => [...(savesStore.get(userId) ?? [])].sort((a, b) => b.savedAt.localeCompare(a.savedAt)),
+    isSaved: async (userId, itemId) => (savesStore.get(userId) ?? []).some((s) => s.itemId === itemId),
+  },
+  comments: {
+    listByTopicId: async (topicId) =>
+      [...commentsStore].filter((c) => c.topicId === topicId).sort((a, b) => a.createdAt.localeCompare(b.createdAt)),
+    add: async (topicId, userId, body) => {
+      const comment: TopicComment = {
+        id: String(commentIdCounter++),
+        topicId,
+        userId,
+        body,
+        createdAt: new Date().toISOString(),
+      };
+      commentsStore.push(comment);
+      return comment;
+    },
   },
 };
 

@@ -17,6 +17,8 @@ export interface Phase {
   slug: string;
   name: string;
   order: number;
+  /** Optional: e.g. "~7 days" for this phase. */
+  estimatedDays?: number | null;
 }
 
 export interface Topic {
@@ -25,6 +27,29 @@ export interface Topic {
   slug: string;
   name: string;
   order: number;
+  /** Optional: e.g. "~3 days" for this topic. */
+  estimatedDays?: number | null;
+}
+
+export interface UserNote {
+  userId: string;
+  itemId: string;
+  body: string;
+  updatedAt: string;
+}
+
+export interface UserSave {
+  userId: string;
+  itemId: string;
+  savedAt: string;
+}
+
+export interface TopicComment {
+  id: string;
+  topicId: string;
+  userId: string;
+  body: string;
+  createdAt: string;
 }
 
 export interface ContentItem {
@@ -50,9 +75,11 @@ export interface DataAdapter {
   };
   phases: {
     listByTrackId(trackId: string): Promise<Phase[]>;
+    getById?(phaseId: string): Promise<Phase | null>;
   };
   topics: {
     listByPhaseId(phaseId: string): Promise<Topic[]>;
+    getById?(topicId: string): Promise<Topic | null>;
   };
   content: {
     listByTopicId(topicId: string): Promise<ContentItem[]>;
@@ -62,5 +89,19 @@ export interface DataAdapter {
     markDone(userId: string, itemId: string): Promise<void>;
     listCompletedItemIds(userId: string, topicId: string): Promise<string[]>;
     isDone(userId: string, itemId: string): Promise<boolean>;
+  };
+  notes: {
+    get(userId: string, itemId: string): Promise<UserNote | null>;
+    upsert(userId: string, itemId: string, body: string): Promise<void>;
+  };
+  saves: {
+    add(userId: string, itemId: string): Promise<void>;
+    remove(userId: string, itemId: string): Promise<void>;
+    list(userId: string): Promise<UserSave[]>;
+    isSaved(userId: string, itemId: string): Promise<boolean>;
+  };
+  comments: {
+    listByTopicId(topicId: string): Promise<TopicComment[]>;
+    add(topicId: string, userId: string, body: string): Promise<TopicComment>;
   };
 }

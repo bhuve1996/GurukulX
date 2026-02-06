@@ -5,15 +5,17 @@
 
 import { createClient } from "@supabase/supabase-js";
 import { config } from "@/lib/config";
-import type { DataAdapter, Track, Phase, Topic, ContentItem } from "@/lib/data/types";
+import type { DataAdapter, Track, Phase, Topic, ContentItem, UserNote, UserSave, TopicComment } from "@/lib/data/types";
 
-// Table names from config if we ever want to make them configurable
 const TABLES = {
   tracks: "tracks",
   phases: "phases",
   topics: "topics",
   content: "content_items",
   userProgress: "user_progress",
+  userNotes: "user_notes",
+  userSaves: "user_saves",
+  topicComments: "topic_comments",
 } as const;
 
 function getClient() {
@@ -57,8 +59,16 @@ const supabaseAdapter: DataAdapter = {
         mapRow<Phase>({
           ...row,
           trackId: row.track_id,
+          estimatedDays: row.estimated_days ?? undefined,
         })
       );
+    },
+    getById: async (phaseId) => {
+      const { data, error } = await getClient().from(TABLES.phases).select("*").eq("id", phaseId).single();
+      if (error && error.code !== "PGRST116") throw new Error(error.message);
+      if (!data) return null;
+      const row = data as Record<string, unknown>;
+      return mapRow<Phase>({ ...row, trackId: row.track_id, estimatedDays: row.estimated_days ?? undefined });
     },
   },
   topics: {
@@ -73,8 +83,16 @@ const supabaseAdapter: DataAdapter = {
         mapRow<Topic>({
           ...row,
           phaseId: row.phase_id,
+          estimatedDays: row.estimated_days ?? undefined,
         })
       );
+    },
+    getById: async (topicId) => {
+      const { data, error } = await getClient().from(TABLES.topics).select("*").eq("id", topicId).single();
+      if (error && error.code !== "PGRST116") throw new Error(error.message);
+      if (!data) return null;
+      const row = data as Record<string, unknown>;
+      return mapRow<Topic>({ ...row, phaseId: row.phase_id, estimatedDays: row.estimated_days ?? undefined });
     },
   },
   content: {
@@ -139,6 +157,96 @@ const supabaseAdapter: DataAdapter = {
         .maybeSingle();
       if (error) throw new Error(error.message);
       return !!data;
+    },
+  },
+  notes: {
+    get: async (userId, itemId) => {
+      const { data, error } = await getClient()
+        .from(TABLES.userNotes)
+        .select("*")
+        .eq("user_id", userId)
+        .eq("item_id", itemId)
+        .maybeSingle();
+      if (error) throw new Error(error.message);
+      if (!data) return null;
+      const row = data as Record<string, unknown>;
+      return mapRow<UserNote>({ ...row, userId: row.user_id, itemId: row.item_id, updatedAt: row.updated_at });
+    },
+    upsert: async (userId, itemId, body) => {
+      const { error } = await getClient()
+        .from(TABLES.userNotes)
+        .upsert({ user_id: userId, item_id: itemId, body, updated_at: new Date().toISOString() }, { onConflict: "user_id,item_id" });
+      if (error) throw new Error(error.message);
+    },
+  },
+  saves: {
+    add: async (userId, itemId) => {
+      const { error } = await getClient()
+        .from(TABLES.userSaves)
+        .upsert({ user_id: userId, item_id: itemId, saved_at: new Date().toISOString() }, { onConflict: "user_id,item_id" });
+      if (error) throw new Error(error.message);
+    },
+    remove: async (userId, itemId) => {
+      const { error } = await getClient()
+        .from(TABLES.userSaves)
+        .delete()
+        .eq("user_id", userId)
+        .eq("item_id", itemId);
+      if (error) throw new Error(error.message);
+    },
+    list: async (userId) => {
+      const { data, error } = await getClient()
+        .from(TABLES.userSaves)
+        .select("*")
+        .eq("user_id", userId)
+        .order("saved_at", { ascending: false });
+      if (error) throw new Error(error.message);
+      return (data ?? []).map((row: Record<string, unknown>) =>
+        mapRow<UserSave>({ ...row, userId: row.user_id, itemId: row.item_id, savedAt: row.saved_at })
+      );
+    },
+    isSaved: async (userId, itemId) => {
+      const { data, error } = await getClient()
+        .from(TABLES.userSaves)
+        .select("item_id")
+        .eq("user_id", userId)
+        .eq("item_id", itemId)
+        .maybeSingle();
+      if (error) throw new Error(error.message);
+      return !!data;
+    },
+  },
+  comments: {
+    listByTopicId: async (topicId) => {
+      const { data, error } = await getClient()
+        .from(TABLES.topicComments)
+        .select("*")
+        .eq("topic_id", topicId)
+        .order("created_at", { ascending: true });
+      if (error) throw new Error(error.message);
+      return (data ?? []).map((row: Record<string, unknown>) =>
+        mapRow<TopicComment>({
+          ...row,
+          topicId: row.topic_id,
+          userId: row.user_id,
+          createdAt: row.created_at,
+        })
+      );
+    },
+    add: async (topicId, userId, body) => {
+      const { data, error } = await getClient()
+        .from(TABLES.topicComments)
+        .insert({ topic_id: topicId, user_id: userId, body })
+        .select()
+        .single();
+      if (error) throw new Error(error.message);
+      const row = data as Record<string, unknown>;
+      return mapRow<TopicComment>({
+        ...row,
+        topicId: row.topic_id,
+        userId: row.user_id,
+        createdAt: row.created_at,
+      });
     },
   },
 };

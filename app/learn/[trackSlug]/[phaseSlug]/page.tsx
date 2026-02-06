@@ -29,15 +29,23 @@ export default async function PhasePage({
       <h1 className="mt-4 text-2xl font-bold text-neutral-900 sm:text-3xl">
         {phase.name}
       </h1>
-      <p className="mt-1 text-neutral-600">Topics in this phase.</p>
+      <p className="mt-1 text-neutral-600">
+        Topics in this phase.
+        {phase.estimatedDays != null && (
+          <span className="ml-1 font-medium text-neutral-700">~{phase.estimatedDays} days</span>
+        )}
+      </p>
       <ul className="mt-6 grid gap-3 sm:grid-cols-2">
         {topics.map((topic) => (
           <li key={topic.id}>
             <Link
               href={`/learn/${track.slug}/${phase.slug}/${topic.slug}`}
-              className="block rounded-xl border border-neutral-200 bg-white p-4 no-underline shadow-sm hover:border-neutral-300 hover:shadow transition min-h-[44px] flex items-center font-medium text-neutral-900"
+              className="block rounded-xl border border-neutral-200 bg-white p-4 no-underline shadow-sm hover:border-neutral-300 hover:shadow transition min-h-[44px] flex items-center justify-between font-medium text-neutral-900"
             >
-              {topic.name}
+              <span>{topic.name}</span>
+              {topic.estimatedDays != null && (
+                <span className="text-sm font-normal text-neutral-500">~{topic.estimatedDays} days</span>
+              )}
             </Link>
           </li>
         ))}

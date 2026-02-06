@@ -34,9 +34,12 @@ export default async function TrackPage({
           <li key={phase.id}>
             <Link
               href={`/learn/${track.slug}/${phase.slug}`}
-              className="block rounded-xl border border-neutral-200 bg-white p-4 no-underline shadow-sm hover:border-neutral-300 hover:shadow transition min-h-[44px] flex items-center font-medium text-neutral-900"
+              className="block rounded-xl border border-neutral-200 bg-white p-4 no-underline shadow-sm hover:border-neutral-300 hover:shadow transition min-h-[44px] flex items-center justify-between font-medium text-neutral-900"
             >
-              {phase.name}
+              <span>{phase.name}</span>
+              {phase.estimatedDays != null && (
+                <span className="text-sm font-normal text-neutral-500">~{phase.estimatedDays} days</span>
+              )}
             </Link>
           </li>
         ))}
