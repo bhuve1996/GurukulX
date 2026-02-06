@@ -31,7 +31,7 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="flex h-[calc(100vh-2.75rem)] min-h-0 flex-col overflow-x-hidden bg-neutral-100 -mx-4 -my-4 md:mx-0 md:my-0 md:h-[calc(100vh-2.75rem)]">
+    <div className="flex h-[calc(100vh-2.75rem)] min-h-0 flex-col overflow-x-hidden bg-neutral-100 -my-4 w-screen max-w-none ml-[calc(-50vw+50%)] md:ml-0 md:my-0 md:w-full md:max-w-container md:h-[calc(100vh-2.75rem)]">
       <div className="min-h-0 w-full flex-1 overflow-hidden px-0 md:mx-auto md:max-w-lg md:px-4 md:py-2">
         <PullToRefresh>
           <SwipeableFeed feed={feed} initialIndex={initialIndex} completedIds={completedIdsArr} />

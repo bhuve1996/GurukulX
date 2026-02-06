@@ -58,7 +58,7 @@ const content: ContentItem[] = [
     body:
       "Python is the standard language for AI and ML: readable syntax, a huge ecosystem (NumPy, Pandas, PyTorch, TensorFlow, scikit-learn), and strong community support. Most research and production ML code is written in Python.\n\nWatch: https://www.youtube.com/watch?v=kqtD5dpn9C0\nRead: https://www.python.org/about/",
     shortBody:
-      "Python is the standard language for AI and machine learning. It has readable syntax, a huge ecosystem (NumPy, Pandas, PyTorch, TensorFlow, scikit-learn), and strong community support. Most research and production ML code is written in Python. Learning Python first gives you the foundation for data science and ML. Start here before moving to data or models.",
+      "Python is the standard language for AI and machine learning. It has readable syntax, a huge ecosystem (NumPy, Pandas, PyTorch, TensorFlow, scikit-learn), and strong community support. Most research and production ML code is written in Python. Learning Python first gives you the foundation for data science and ML. You will use it for data loading, model training, and deployment. Start here before moving to data or models—everything else in this track builds on Python.",
     imageUrl: "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=800&q=80",
     videoUrl: null,
     order: 0,
@@ -71,7 +71,7 @@ const content: ContentItem[] = [
     body:
       "Use clear variable names. Prefer type hints for readability: name: str, count: int, price: float. They help tools and other developers understand your code. Start with simple types and add hints as you go.\n\nWatch: https://www.youtube.com/watch?v=0sOvCWFmrtA",
     shortBody:
-      "Use clear variable names so your code is easy to read. Prefer type hints: name: str, count: int, price: float. They help tools and other developers understand your code. Start with simple types and add hints as you go. Good naming and types make debugging easier and prevent many bugs.",
+      "Use clear variable names so your code is easy to read. Prefer type hints: name: str, count: int, price: float. They help tools and other developers understand your code. Start with simple types and add hints as you go. Good naming and types make debugging easier and prevent many bugs. In ML you will deal with arrays and data structures; clear names and types keep your notebooks and scripts maintainable.",
     imageUrl: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80",
     videoUrl: "https://www.youtube.com/embed/0sOvCWFmrtA",
     order: 1,
@@ -84,7 +84,7 @@ const content: ContentItem[] = [
     body:
       "Create a .py file and run it with: python file.py. Use print() to see output. Keep scripts small and run them often to catch errors early.\n\nRead: https://docs.python.org/3/tutorial/interpreter.html",
     shortBody:
-      "Create a .py file and run it with: python file.py. Use print() to see output. Keep scripts small and run them often to catch errors early. This habit will save you time as you move to larger projects. The Python interpreter and docs are your friends.",
+      "Create a .py file and run it with: python file.py. Use print() to see output. Keep scripts small and run them often to catch errors early. This habit will save you time as you move to larger projects. The Python interpreter and docs are your friends. Once you can run a script, you are ready to try Jupyter notebooks for experiments and then move on to data and ML libraries.",
     imageUrl: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80",
     videoUrl: null,
     order: 2,
@@ -98,7 +98,7 @@ const content: ContentItem[] = [
     body:
       "NumPy gives you fast arrays and math in Python. Use ndarray for vectors and matrices; vectorize loops instead of writing for-loops. It is the foundation for Pandas and most ML libraries.\n\nRead: https://numpy.org/doc/stable/user/quickstart.html",
     shortBody:
-      "NumPy gives you fast arrays and numerical math in Python. Use ndarray for vectors and matrices; vectorize loops instead of writing for-loops. It is the foundation for Pandas and most ML libraries. Once you are comfortable with NumPy, data manipulation and model code will make much more sense.",
+      "NumPy gives you fast arrays and numerical math in Python. Use ndarray for vectors and matrices; vectorize loops instead of writing for-loops. It is the foundation for Pandas and most ML libraries. Once you are comfortable with NumPy, data manipulation and model code will make much more sense. Operations like shape, reshape, broadcasting, and dot products are used everywhere in ML—from data prep to training loops.",
     imageUrl: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&q=80",
     videoUrl: null,
     order: 0,
@@ -111,7 +111,7 @@ const content: ContentItem[] = [
     body:
       "Pandas DataFrames are tables: rows and columns, load CSV with read_csv(), filter with boolean indexing, group by with groupby(). Essential for data prep before ML.\n\nRead: https://pandas.pydata.org/docs/getting_started/intro_tutorials/01_table_oriented.html",
     shortBody:
-      "Pandas DataFrames are tables: rows and columns. Load CSV with read_csv(), filter with boolean indexing, and aggregate with groupby(). Essential for data prep before ML. Most real-world data comes in as tables; Pandas is the standard way to clean and explore it in Python.",
+      "Pandas DataFrames are tables: rows and columns. Load CSV with read_csv(), filter with boolean indexing, and aggregate with groupby(). Essential for data prep before ML. Most real-world data comes in as tables; Pandas is the standard way to clean and explore it in Python. You will use it to load datasets, handle missing values, and turn raw data into features for models. Master the basics before moving to the Data phase.",
     imageUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
     videoUrl: null,
     order: 1,
@@ -124,7 +124,7 @@ const content: ContentItem[] = [
     body:
       "Matplotlib: low-level plotting (plot, scatter, bar). Seaborn: higher-level, great for distributions and correlations (histplot, pairplot, heatmap). Use both for EDA and reports.\n\nRead: https://matplotlib.org/stable/tutorials/introductory/quick_start.html",
     shortBody:
-      "Matplotlib is low-level plotting: plot, scatter, bar. Seaborn is higher-level and great for distributions and correlations: histplot, pairplot, heatmap. Use both for EDA and reports. Visualizing data before modeling helps you spot problems and choose the right approach.",
+      "Matplotlib is low-level plotting: plot, scatter, bar. Seaborn is higher-level and great for distributions and correlations: histplot, pairplot, heatmap. Use both for EDA and reports. Visualizing data before modeling helps you spot problems and choose the right approach. In the Data phase you will use these to explore datasets, check for outliers, and present findings. A quick chart often explains more than a table.",
     imageUrl: "https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=800&q=80",
     videoUrl: null,
     order: 2,
