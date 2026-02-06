@@ -20,8 +20,11 @@ Default data adapter is `memory` (no DB). To use Supabase:
 1. Create a project at supabase.com, get URL and anon key.
 2. Set in `.env`: `DATA_ADAPTER=supabase`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 3. In Supabase **SQL Editor**, run the migrations in order:
-   - `supabase/migrations/000_content_tables.sql` (tracks, phases, topics, content_items + seed)
-   - `supabase/migrations/001_notes_saves_comments_estimated_days.sql` (user_progress, user_notes, user_saves, topic_comments)
+   - `000_content_tables.sql` (tracks, phases, topics, content_items + seed)
+   - `001_notes_saves_comments_estimated_days.sql` (user_progress, user_notes, user_saves, topic_comments)
+   - `002_full_course_content.sql` (full course topics + content)
+   - `003_backfill_missing_image_urls.sql` (default images where missing)
+   - `004_expand_short_bodies.sql` (richer short text for feed cards)
 
 ## Switching database
 
@@ -47,7 +50,11 @@ Usually means the app is using Supabase but the content tables are missing. Fix:
 
 1. In Supabase Dashboard → **SQL Editor**, run **`supabase/migrations/000_content_tables.sql`** (creates `tracks`, `phases`, `topics`, `content_items` and seeds them).
 2. If you haven’t already, run **`supabase/migrations/001_notes_saves_comments_estimated_days.sql`** for progress, notes, saves, comments.
-3. Redeploy or refresh the app.
+3. Run **`002_full_course_content.sql`**, **`003_backfill_missing_image_urls.sql`**, and **`004_expand_short_bodies.sql`** so the feed has full course content and richer card text.
+4. Redeploy or refresh the app.
+
+**Feed cards show very short text**  
+If home feed cards show only one short line (e.g. “Python: clear syntax… Start here.”), the DB likely has old or null `short_body`. In Supabase **SQL Editor**, run **`supabase/migrations/004_expand_short_bodies.sql`** to update items 1–6 with fuller short text. Then refresh the app.
 
 **Alternative:** Set `DATA_ADAPTER=memory` in your production env so the app uses in-memory data (no Supabase tables needed). Progress/notes/saves won’t persist across restarts.
 
