@@ -19,7 +19,9 @@ Default data adapter is `memory` (no DB). To use Supabase:
 
 1. Create a project at supabase.com, get URL and anon key.
 2. Set in `.env`: `DATA_ADAPTER=supabase`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
-3. Create tables matching `lib/data/types.ts` (tracks, phases, topics, content_items).
+3. In Supabase **SQL Editor**, run the migrations in order:
+   - `supabase/migrations/000_content_tables.sql` (tracks, phases, topics, content_items + seed)
+   - `supabase/migrations/001_notes_saves_comments_estimated_days.sql` (user_progress, user_notes, user_saves, topic_comments)
 
 ## Switching database
 
@@ -37,6 +39,17 @@ GurukulX is a **Progressive Web App**: you can add it to your home screen and op
 4. Tap **Add**. An icon appears on your home screen; opening it launches GurukulX in standalone mode (no browser UI).
 
 **Note:** For “Add to Home Screen” to work, the site must be served over **HTTPS** (e.g. Vercel, or your own SSL). `localhost` works for testing in Safari on your computer, but not for installing on the phone unless you use a tunnel (e.g. ngrok) or deploy first.
+
+## Troubleshooting
+
+**“An error occurred in the Server Components render” (production)**  
+Usually means the app is using Supabase but the content tables are missing. Fix:
+
+1. In Supabase Dashboard → **SQL Editor**, run **`supabase/migrations/000_content_tables.sql`** (creates `tracks`, `phases`, `topics`, `content_items` and seeds them).
+2. If you haven’t already, run **`supabase/migrations/001_notes_saves_comments_estimated_days.sql`** for progress, notes, saves, comments.
+3. Redeploy or refresh the app.
+
+**Alternative:** Set `DATA_ADAPTER=memory` in your production env so the app uses in-memory data (no Supabase tables needed). Progress/notes/saves won’t persist across restarts.
 
 ## Cursor rules
 
