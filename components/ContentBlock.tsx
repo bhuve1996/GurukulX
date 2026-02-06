@@ -3,6 +3,7 @@ import type { ContentItem } from "@/lib/data/types";
 import { MarkDoneButton } from "@/components/MarkDoneButton";
 import { SaveButton } from "@/components/SaveButton";
 import { ItemNote } from "@/components/ItemNote";
+import { ContentBody } from "@/components/ContentBody";
 
 type ContentBlockProps = {
   item: ContentItem;
@@ -79,7 +80,7 @@ export function ContentBlock({ item, isDone = false, isSaved = false, initialNot
       <Media item={item} />
       {item.body && (
         <div className="mt-3 max-w-none text-neutral-700 leading-relaxed">
-          <p className="whitespace-pre-line">{item.body}</p>
+          <ContentBody text={item.body} />
         </div>
       )}
       <ItemNote itemId={item.id} initialBody={initialNoteBody ?? null} />

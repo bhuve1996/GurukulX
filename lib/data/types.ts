@@ -60,7 +60,7 @@ export interface ContentItem {
   body: string | null;
   /** Short for every item: concise summary that gives the whole idea. Used for short cards (image + title + text). */
   shortBody?: string | null;
-  /** Image for the short card. If missing, UI shows a placeholder (e.g. first letter). */
+  /** Image for the card. Recommended for all notes/shorts (mandatory for best PWA experience); UI shows a placeholder if missing. */
   imageUrl?: string | null;
   /** Optional video URL (embed or direct) for full content. */
   videoUrl?: string | null;

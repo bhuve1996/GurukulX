@@ -65,17 +65,18 @@ INSERT INTO topics (id, phase_id, slug, name, "order", estimated_days) VALUES
   ('2', '1', 'libraries', 'Libraries', 1, 4)
 ON CONFLICT (id) DO NOTHING;
 
+-- Content: summaries that explain the topic; image mandatory; add Watch/Read links in body for clarity.
 INSERT INTO content_items (id, topic_id, type, title, body, short_body, image_url, video_url, "order") VALUES
   ('1', '1', 'note', 'Why Python for AI?',
-   'Python is the go-to language for AI and ML: clear syntax, huge ecosystem (NumPy, PyTorch, TensorFlow), and great community. Start here.',
-   'Python: clear syntax, huge ecosystem (NumPy, PyTorch, TensorFlow), great community. Start here.',
+   'Python is the standard language for AI and ML: readable syntax, a huge ecosystem (NumPy, Pandas, PyTorch, TensorFlow, scikit-learn), and strong community support. Most research and production ML code is written in Python.' || E'\n\n' || 'Watch: https://www.youtube.com/watch?v=kqtD5dpn9C0' || E'\n' || 'Read: https://www.python.org/about/',
+   'Python: readable syntax, huge ecosystem (NumPy, PyTorch, TensorFlow), great for AI/ML. Start here.',
    'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=800&q=80', NULL, 0),
   ('2', '1', 'short', 'Variables and types',
-   'Use clear names. Prefer type hints: `name: str`, `count: int`. Keep it readable.',
-   'Clear names. Prefer type hints: name: str, count: int. Keep it readable.',
-   NULL, 'https://www.youtube.com/embed/dQw4w9WgXcQ', 1),
+   'Use clear variable names. Prefer type hints for readability: name: str, count: int, price: float. They help tools and other developers understand your code. Start with simple types and add hints as you go.' || E'\n\n' || 'Watch: https://www.youtube.com/watch?v=0sOvCWFmrtA',
+   'Clear names. Prefer type hints: name: str, count: int. Keeps code readable.',
+   'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80', 'https://www.youtube.com/embed/0sOvCWFmrtA', 1),
   ('3', '1', 'note', 'Your first script',
-   'Create a `.py` file, run with `python file.py`. Use `print()` to see output. Small steps.',
+   'Create a .py file and run it with: python file.py. Use print() to see output. Keep scripts small and run them often to catch errors early.' || E'\n\n' || 'Read: https://docs.python.org/3/tutorial/interpreter.html',
    'Create a .py file, run with python file.py. Use print() to see output.',
-   NULL, NULL, 2)
+   'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80', NULL, 2)
 ON CONFLICT (id) DO NOTHING;

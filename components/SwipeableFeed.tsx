@@ -9,14 +9,18 @@ const SWIPE_THRESHOLD = 60;
 
 type Props = {
   feed: FeedItem[];
+  /** Start at this index (e.g. first incomplete item so user continues where they left off). */
+  initialIndex?: number;
 };
 
 function getContentUrl(f: FeedItem): string {
   return `/learn/${f.track.slug}/${f.phase.slug}/${f.topic.slug}#item-${f.item.id}`;
 }
 
-export function SwipeableFeed({ feed }: Props) {
-  const [index, setIndex] = useState(0);
+export function SwipeableFeed({ feed, initialIndex = 0 }: Props) {
+  const [index, setIndex] = useState(() =>
+    Math.min(Math.max(0, initialIndex), Math.max(0, feed.length - 1))
+  );
   const touchStartY = useRef(0);
 
   const goNext = useCallback(() => {
@@ -58,20 +62,20 @@ export function SwipeableFeed({ feed }: Props) {
 
   return (
     <div
-      className="flex min-h-[calc(100vh-120px)] flex-col sm:min-h-[calc(100vh-100px)]"
+      className="flex h-full min-h-0 flex-col"
       style={{ touchAction: "pan-y" }}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      <article className="relative flex flex-1 flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-lg">
+      <article className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-lg md:max-h-[calc(100vh-140px)]">
         <Link
           href={contentUrl}
-          className="flex flex-1 flex-col overflow-hidden text-left no-underline outline-none"
+          className="flex h-full min-h-0 flex-1 flex-col overflow-hidden text-left no-underline outline-none"
         >
           <span className="absolute left-4 top-4 z-10 rounded-full bg-black/60 px-3 py-1 text-xs font-medium text-white">
             Part of {f.topic.name}
           </span>
-          <div className="relative aspect-[4/3] w-full flex-shrink-0 overflow-hidden bg-neutral-200">
+          <div className="relative min-h-[40vh] flex-1 w-full overflow-hidden bg-neutral-200">
             {f.item.imageUrl ? (
               <Image
                 src={f.item.imageUrl}
@@ -82,16 +86,16 @@ export function SwipeableFeed({ feed }: Props) {
                 priority={index < 2}
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center bg-neutral-200 text-5xl font-semibold text-neutral-400">
+              <div className="flex h-full min-h-[200px] w-full items-center justify-center bg-neutral-200 text-5xl font-semibold text-neutral-400">
                 {f.item.title.trim().charAt(0).toUpperCase() || "?"}
               </div>
             )}
           </div>
-          <div className="flex flex-1 flex-col p-4 sm:p-5">
+          <div className="flex flex-shrink-0 flex-col p-4 sm:p-5">
             <h2 className="text-lg font-semibold text-neutral-900 line-clamp-2 sm:text-xl">
               {f.item.title}
             </h2>
-            <p className="mt-2 line-clamp-4 flex-1 text-sm text-neutral-600 sm:line-clamp-5">
+            <p className="mt-2 line-clamp-4 text-sm text-neutral-600 sm:line-clamp-5">
               {shortText}
             </p>
             <span className="mt-3 inline-flex items-center text-sm font-medium text-neutral-900">
@@ -104,7 +108,7 @@ export function SwipeableFeed({ feed }: Props) {
         </Link>
       </article>
 
-      <div className="mt-4 flex items-center justify-between gap-3 px-1">
+      <div className="flex shrink-0 items-center justify-between gap-3 px-1 py-3">
         <button
           type="button"
           onClick={goPrev}
