@@ -21,7 +21,7 @@ export default async function HomePage() {
   let initialIndex = 0;
   if (userId && feed.length > 0) {
     const completedIds = new Set<string>();
-    const topicIds = [...new Set(feed.map((f) => f.topic.id))];
+    const topicIds = feed.map((f) => f.topic.id).filter((id, i, arr) => arr.indexOf(id) === i);
     for (const topicId of topicIds) {
       const done = await adapter.progress.listCompletedItemIds(userId, topicId);
       done.forEach((id) => completedIds.add(id));
