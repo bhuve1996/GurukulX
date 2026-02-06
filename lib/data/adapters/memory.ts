@@ -30,6 +30,23 @@ const phases: Phase[] = [
 const topics: Topic[] = [
   { id: "1", phaseId: "1", slug: "basics", name: "Basics", order: 0, estimatedDays: 3 },
   { id: "2", phaseId: "1", slug: "libraries", name: "Libraries", order: 1, estimatedDays: 4 },
+  { id: "3", phaseId: "2", slug: "data-loading", name: "Data loading", order: 0, estimatedDays: 2 },
+  { id: "4", phaseId: "2", slug: "eda", name: "Exploratory data analysis", order: 1, estimatedDays: 3 },
+  { id: "5", phaseId: "2", slug: "visualization", name: "Visualization", order: 2, estimatedDays: 2 },
+  { id: "6", phaseId: "3", slug: "supervised", name: "Supervised learning", order: 0, estimatedDays: 4 },
+  { id: "7", phaseId: "3", slug: "algorithms", name: "Key algorithms", order: 1, estimatedDays: 5 },
+  { id: "8", phaseId: "3", slug: "evaluation", name: "Model evaluation", order: 2, estimatedDays: 3 },
+  { id: "9", phaseId: "4", slug: "neural-nets", name: "Neural networks", order: 0, estimatedDays: 4 },
+  { id: "10", phaseId: "4", slug: "cnns", name: "Convolutional networks", order: 1, estimatedDays: 4 },
+  { id: "11", phaseId: "4", slug: "rnns", name: "RNNs and sequences", order: 2, estimatedDays: 4 },
+  { id: "12", phaseId: "5", slug: "text-basics", name: "Text basics", order: 0, estimatedDays: 4 },
+  { id: "13", phaseId: "5", slug: "transformers", name: "Transformers", order: 1, estimatedDays: 5 },
+  { id: "14", phaseId: "5", slug: "llms-genai", name: "LLMs and GenAI", order: 2, estimatedDays: 5 },
+  { id: "15", phaseId: "6", slug: "images", name: "Images and preprocessing", order: 0, estimatedDays: 4 },
+  { id: "16", phaseId: "6", slug: "vision-models", name: "Vision models", order: 1, estimatedDays: 3 },
+  { id: "17", phaseId: "7", slug: "serving", name: "Serving models", order: 0, estimatedDays: 5 },
+  { id: "18", phaseId: "8", slug: "pipeline", name: "Pipelines and monitoring", order: 0, estimatedDays: 7 },
+  { id: "19", phaseId: "9", slug: "project", name: "Capstone project", order: 0, estimatedDays: 14 },
 ];
 
 const content: ContentItem[] = [
@@ -69,6 +86,43 @@ const content: ContentItem[] = [
     shortBody:
       "Create a .py file, run with python file.py. Use print() to see output.",
     imageUrl: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80",
+    videoUrl: null,
+    order: 2,
+  },
+  // Python > Libraries (full course continues in Supabase via 002_full_course_content.sql)
+  {
+    id: "4",
+    topicId: "2",
+    type: "note",
+    title: "NumPy in a nutshell",
+    body:
+      "NumPy gives you fast arrays and math in Python. Use ndarray for vectors and matrices; vectorize loops instead of writing for-loops. It is the foundation for Pandas and most ML libraries.\n\nRead: https://numpy.org/doc/stable/user/quickstart.html",
+    shortBody: "NumPy: fast arrays, vectorized math. Foundation for Pandas and ML.",
+    imageUrl: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&q=80",
+    videoUrl: null,
+    order: 0,
+  },
+  {
+    id: "5",
+    topicId: "2",
+    type: "short",
+    title: "Pandas DataFrames",
+    body:
+      "Pandas DataFrames are tables: rows and columns, load CSV with read_csv(), filter with boolean indexing, group by with groupby(). Essential for data prep before ML.\n\nRead: https://pandas.pydata.org/docs/getting_started/intro_tutorials/01_table_oriented.html",
+    shortBody: "DataFrames: load CSV, filter, groupby. Essential for data prep.",
+    imageUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+    videoUrl: null,
+    order: 1,
+  },
+  {
+    id: "6",
+    topicId: "2",
+    type: "note",
+    title: "Matplotlib and Seaborn",
+    body:
+      "Matplotlib: low-level plotting (plot, scatter, bar). Seaborn: higher-level, great for distributions and correlations (histplot, pairplot, heatmap). Use both for EDA and reports.\n\nRead: https://matplotlib.org/stable/tutorials/introductory/quick_start.html",
+    shortBody: "Matplotlib for custom plots; Seaborn for stats and EDA.",
+    imageUrl: "https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=800&q=80",
     videoUrl: null,
     order: 2,
   },

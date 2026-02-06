@@ -4,6 +4,7 @@ import { useState, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { FeedItem } from "@/lib/learn/feed";
+import { MarkDoneButton } from "@/components/MarkDoneButton";
 
 const SWIPE_THRESHOLD = 80;
 
@@ -11,13 +12,16 @@ type Props = {
   feed: FeedItem[];
   /** Start at this index (e.g. first incomplete item so user continues where they left off). */
   initialIndex?: number;
+  /** Completed item IDs (from progress) so we can show Done badge and Mark done. */
+  completedIds?: string[];
 };
 
 function getContentUrl(f: FeedItem): string {
   return `/learn/${f.track.slug}/${f.phase.slug}/${f.topic.slug}#item-${f.item.id}`;
 }
 
-export function SwipeableFeed({ feed, initialIndex = 0 }: Props) {
+export function SwipeableFeed({ feed, initialIndex = 0, completedIds = [] }: Props) {
+  const completedSet = new Set(completedIds);
   const [index, setIndex] = useState(() =>
     Math.min(Math.max(0, initialIndex), Math.max(0, feed.length - 1))
   );
@@ -93,6 +97,7 @@ export function SwipeableFeed({ feed, initialIndex = 0 }: Props) {
   const f = feed[index];
   const shortText = f.item.shortBody ?? f.item.body ?? "";
   const contentUrl = getContentUrl(f);
+  const isDone = completedSet.has(f.item.id);
 
   return (
     <div
@@ -111,13 +116,16 @@ export function SwipeableFeed({ feed, initialIndex = 0 }: Props) {
         style={{ transform: `translateX(${dragOffset}px)` }}
       >
         <article className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-lg md:max-h-[calc(100vh-140px)]">
+          <span className="absolute left-4 top-4 z-10 rounded-full bg-black/60 px-3 py-1 text-xs font-medium text-white">
+            Part of {f.topic.name}
+          </span>
+          <div className="absolute right-4 top-4 z-10">
+            <MarkDoneButton itemId={f.item.id} isDone={isDone} />
+          </div>
           <Link
             href={contentUrl}
             className="flex h-full min-h-0 flex-1 flex-col overflow-hidden text-left no-underline outline-none"
           >
-          <span className="absolute left-4 top-4 z-10 rounded-full bg-black/60 px-3 py-1 text-xs font-medium text-white">
-            Part of {f.topic.name}
-          </span>
           <div className="relative min-h-[40vh] flex-1 w-full overflow-hidden bg-neutral-200">
             {f.item.imageUrl ? (
               <Image

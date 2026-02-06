@@ -17,16 +17,16 @@ export default async function HomePage() {
     (id) => adapter.content.listByTopicId(id)
   );
 
-  // Start at first incomplete item so user can pick up where they left off
+  // Start at first incomplete item; build completedIds for Mark done on feed
+  const completedIdsArr: string[] = [];
   let initialIndex = 0;
   if (userId && feed.length > 0) {
-    const completedIds = new Set<string>();
     const topicIds = feed.map((f) => f.topic.id).filter((id, i, arr) => arr.indexOf(id) === i);
     for (const topicId of topicIds) {
       const done = await adapter.progress.listCompletedItemIds(userId, topicId);
-      done.forEach((id) => completedIds.add(id));
+      for (let d = 0; d < done.length; d++) completedIdsArr.push(done[d]);
     }
-    const nextIdx = feed.findIndex((f) => !completedIds.has(f.item.id));
+    const nextIdx = feed.findIndex((f) => !completedIdsArr.includes(f.item.id));
     if (nextIdx !== -1) initialIndex = nextIdx;
   }
 
@@ -43,7 +43,7 @@ export default async function HomePage() {
         </Link>
       </div>
       <div className="min-h-0 flex-1 overflow-hidden md:mx-auto md:max-w-lg md:py-4">
-        <SwipeableFeed feed={feed} initialIndex={initialIndex} />
+        <SwipeableFeed feed={feed} initialIndex={initialIndex} completedIds={completedIdsArr} />
       </div>
     </div>
   );
