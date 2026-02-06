@@ -28,11 +28,19 @@ export function MarkDoneButton({ itemId, isDone }: Props) {
     }
   }
 
+  const iconClass = "h-5 w-5 sm:h-6 sm:w-6";
+
   if (done) {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1.5 text-sm font-medium text-green-800">
-        <span aria-hidden>✓</span> Done
-      </span>
+      <button
+        type="button"
+        aria-label="Marked as done"
+        className="inline-flex min-h-[36px] min-w-[36px] sm:min-h-[44px] sm:min-w-[44px] items-center justify-center rounded-full bg-green-100 text-green-700 hover:bg-green-200 transition-colors"
+      >
+        <svg className={iconClass} fill="currentColor" viewBox="0 0 20 20" aria-hidden>
+          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+        </svg>
+      </button>
     );
   }
 
@@ -41,9 +49,16 @@ export function MarkDoneButton({ itemId, isDone }: Props) {
       type="button"
       onClick={handleMarkDone}
       disabled={loading}
-      className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:opacity-60"
+      aria-label="Mark as done"
+      className="inline-flex min-h-[36px] min-w-[36px] sm:min-h-[44px] sm:min-w-[44px] items-center justify-center rounded-full border border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50 hover:border-neutral-400 disabled:opacity-60 transition-colors"
     >
-      {loading ? "…" : "Mark done"}
+      {loading ? (
+        <span className={iconClass} aria-hidden>…</span>
+      ) : (
+        <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      )}
     </button>
   );
 }

@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { getDataAdapter } from "@/lib/data";
 import { getCurrentUserId } from "@/lib/auth";
 import { getFeed } from "@/lib/learn/feed";
 import { SwipeableFeed } from "@/components/SwipeableFeed";
+import { PullToRefresh } from "@/components/PullToRefresh";
 
 export const dynamic = "force-dynamic";
 
@@ -31,9 +31,11 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-3.5rem)] flex-col overflow-x-hidden bg-neutral-100 md:min-h-[calc(100vh-4rem)] -mx-4 md:mx-0">
+    <div className="flex h-[calc(100vh-2.75rem)] min-h-0 flex-col overflow-x-hidden bg-neutral-100 -mx-4 -my-4 md:mx-0 md:my-0 md:h-[calc(100vh-2.75rem)]">
       <div className="min-h-0 w-full flex-1 overflow-hidden px-0 md:mx-auto md:max-w-lg md:px-4 md:py-2">
-        <SwipeableFeed feed={feed} initialIndex={initialIndex} completedIds={completedIdsArr} />
+        <PullToRefresh>
+          <SwipeableFeed feed={feed} initialIndex={initialIndex} completedIds={completedIdsArr} />
+        </PullToRefresh>
       </div>
     </div>
   );
