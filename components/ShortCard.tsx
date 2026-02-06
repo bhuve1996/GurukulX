@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ContentItem } from "@/lib/data/types";
+import { DEFAULT_CARD_IMAGE } from "@/lib/constants";
 
 type Props = {
   item: ContentItem;
@@ -28,22 +29,13 @@ export function ShortCard({ item, topicName, isDone }: Props) {
         </span>
       )}
       <div className="relative aspect-video w-full overflow-hidden bg-neutral-200">
-        {item.imageUrl ? (
-          <Image
-            src={item.imageUrl}
-            alt=""
-            fill
-            className="object-cover transition group-hover:scale-[1.02]"
-            sizes="(max-width: 640px) 100vw, 400px"
-          />
-        ) : (
-          <div
-            className="flex h-full w-full items-center justify-center bg-neutral-200 text-4xl font-semibold text-neutral-400"
-            style={{ fontFamily: "system-ui" }}
-          >
-            {item.title.trim().charAt(0).toUpperCase() || "?"}
-          </div>
-        )}
+        <Image
+          src={item.imageUrl || DEFAULT_CARD_IMAGE}
+          alt=""
+          fill
+          className="object-cover transition group-hover:scale-[1.02]"
+          sizes="(max-width: 640px) 100vw, 400px"
+        />
       </div>
       <div className="p-4">
         <h3 className="font-semibold text-neutral-900 line-clamp-2">{item.title}</h3>

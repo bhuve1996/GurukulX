@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ContentItem } from "@/lib/data/types";
 import { MarkDoneButton } from "@/components/MarkDoneButton";
+import { DEFAULT_CARD_IMAGE } from "@/lib/constants";
 
 function normalizeEmbedUrl(url: string): string {
   if (/youtube\.com\/embed\//.test(url) || /vimeo\.com\/video\//.test(url)) return url;
@@ -82,17 +83,15 @@ export function ShortsStack({
           <h2 className="mt-2 text-xl font-semibold text-neutral-900 sm:text-2xl">
             {item.title}
           </h2>
-          {item.imageUrl && (
-            <figure className="relative my-3 aspect-video w-full overflow-hidden rounded-lg bg-neutral-200">
-              <Image
-                src={item.imageUrl}
-                alt=""
-                fill
-                className="object-cover"
-                sizes="100vw"
-              />
-            </figure>
-          )}
+          <figure className="relative my-3 aspect-video w-full overflow-hidden rounded-lg bg-neutral-200">
+            <Image
+              src={item.imageUrl || DEFAULT_CARD_IMAGE}
+              alt=""
+              fill
+              className="object-cover"
+              sizes="100vw"
+            />
+          </figure>
           {item.videoUrl && /youtube|youtu\.be|vimeo/.test(item.videoUrl) && (
             <div className="my-3 aspect-video w-full overflow-hidden rounded-lg bg-neutral-200">
               <iframe

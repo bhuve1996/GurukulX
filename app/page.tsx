@@ -31,18 +31,8 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-3.5rem)] flex-col bg-neutral-100 md:min-h-[calc(100vh-4rem)]">
-      {/* InShorts-style minimal header; feed fills remaining viewport for PWA */}
-      <div className="flex shrink-0 items-center justify-between border-b border-neutral-200 bg-white/95 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-white/80">
-        <span className="text-lg font-semibold text-neutral-900">For you</span>
-        <Link
-          href="/learn"
-          className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg px-3 py-2 text-sm font-medium text-neutral-600 no-underline hover:bg-neutral-100 hover:text-neutral-900"
-        >
-          Learn
-        </Link>
-      </div>
-      <div className="min-h-0 flex-1 overflow-hidden md:mx-auto md:max-w-lg md:py-4">
+    <div className="flex min-h-[calc(100vh-3.5rem)] flex-col overflow-x-hidden bg-neutral-100 md:min-h-[calc(100vh-4rem)] -mx-4 md:mx-0">
+      <div className="min-h-0 w-full flex-1 overflow-hidden px-0 md:mx-auto md:max-w-lg md:px-4 md:py-2">
         <SwipeableFeed feed={feed} initialIndex={initialIndex} completedIds={completedIdsArr} />
       </div>
     </div>

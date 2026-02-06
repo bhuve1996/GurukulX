@@ -26,15 +26,15 @@ ON CONFLICT (id) DO NOTHING;
 INSERT INTO content_items (id, topic_id, type, title, body, short_body, image_url, video_url, "order") VALUES
   ('4', '2', 'note', 'NumPy in a nutshell',
    'NumPy gives you fast arrays and math in Python. Use ndarray for vectors and matrices; vectorize loops instead of writing for-loops. It is the foundation for Pandas and most ML libraries.' || E'\n\n' || 'Read: https://numpy.org/doc/stable/user/quickstart.html',
-   'NumPy: fast arrays, vectorized math. Foundation for Pandas and ML.',
+   'NumPy gives you fast arrays and numerical math in Python. Use ndarray for vectors and matrices; vectorize loops instead of writing for-loops. It is the foundation for Pandas and most ML libraries. Once you are comfortable with NumPy, data manipulation and model code will make much more sense.',
    'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&q=80', NULL, 0),
   ('5', '2', 'short', 'Pandas DataFrames',
    'Pandas DataFrames are tables: rows and columns, load CSV with read_csv(), filter with boolean indexing, group by with groupby(). Essential for data prep before ML.' || E'\n\n' || 'Read: https://pandas.pydata.org/docs/getting_started/intro_tutorials/01_table_oriented.html',
-   'DataFrames: load CSV, filter, groupby. Essential for data prep.',
+   'Pandas DataFrames are tables: rows and columns. Load CSV with read_csv(), filter with boolean indexing, and aggregate with groupby(). Essential for data prep before ML. Most real-world data comes in as tables; Pandas is the standard way to clean and explore it in Python.',
    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80', NULL, 1),
   ('6', '2', 'note', 'Matplotlib and Seaborn',
    'Matplotlib: low-level plotting (plot, scatter, bar). Seaborn: higher-level, great for distributions and correlations (histplot, pairplot, heatmap). Use both for EDA and reports.' || E'\n\n' || 'Read: https://matplotlib.org/stable/tutorials/introductory/quick_start.html',
-   'Matplotlib for custom plots; Seaborn for stats and EDA.',
+   'Matplotlib is low-level plotting: plot, scatter, bar. Seaborn is higher-level and great for distributions and correlations: histplot, pairplot, heatmap. Use both for EDA and reports. Visualizing data before modeling helps you spot problems and choose the right approach.',
    'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=800&q=80', NULL, 2)
 ON CONFLICT (id) DO NOTHING;
 
@@ -42,15 +42,15 @@ ON CONFLICT (id) DO NOTHING;
 INSERT INTO content_items (id, topic_id, type, title, body, short_body, image_url, video_url, "order") VALUES
   ('7', '3', 'note', 'Loading CSV and Excel',
    'Use pandas: read_csv() for CSV, read_excel() for Excel. Set index_col, parse_dates, and handle encoding (encoding="utf-8"). Always inspect with .head() and .dtypes.' || E'\n\n' || 'Read: https://pandas.pydata.org/docs/user_guide/io.html',
-   'pandas read_csv/read_excel; set index, dates, encoding.',
+   'Use pandas read_csv() for CSV and read_excel() for Excel. Set index_col, parse_dates, and handle encoding. Always inspect with .head() and .dtypes so you understand the data before modeling. Loading data correctly saves time later.',
    'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&q=80', NULL, 0),
   ('8', '3', 'short', 'APIs and JSON',
    'Use requests.get(url), then .json() to get a dict/list. Normalize nested JSON with json_normalize or flatten by hand. Store in a DataFrame for analysis.' || E'\n\n' || 'Read: https://requests.readthedocs.io/en/stable/',
-   'requests.get(), .json(), normalize to DataFrame.',
+   'Use requests.get(url) then .json() to get data. Normalize nested JSON with json_normalize or by hand. Store in a DataFrame for analysis. Many datasets and services expose JSON APIs; this is how you bring that data into your pipeline.',
    'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80', NULL, 1),
   ('9', '3', 'note', 'Databases and SQL',
    'Connect with sqlalchemy or pandas read_sql(). Write SQL for SELECT, WHERE, JOIN, GROUP BY. For large data use chunking or push down filters. SQL is a core skill for data roles.' || E'\n\n' || 'Read: https://pandas.pydata.org/docs/reference/api/pandas.read_sql.html',
-   'SQL + pandas read_sql; filters and JOINs for analytics.',
+   'Connect with sqlalchemy or pandas read_sql(). Write SQL for SELECT, WHERE, JOIN, GROUP BY. For large data use chunking or push down filters. SQL is a core skill for data and analytics roles.',
    'https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=800&q=80', NULL, 2)
 ON CONFLICT (id) DO NOTHING;
 
@@ -58,15 +58,15 @@ ON CONFLICT (id) DO NOTHING;
 INSERT INTO content_items (id, topic_id, type, title, body, short_body, image_url, video_url, "order") VALUES
   ('10', '4', 'note', 'Summary statistics',
    'Use .describe() for mean, std, min, max, quartiles. Check .info() for dtypes and nulls. Correlations: df.corr(). Always understand scale and distribution before modeling.' || E'\n\n' || 'Read: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.describe.html',
-   'describe(), info(), corr(). Scale and distribution matter.',
+   'Use .describe() for mean, std, min, max, quartiles. Check .info() for dtypes and nulls. Correlations: df.corr(). Always understand scale and distribution before modeling so you choose the right approach and spot issues early.',
    'https://images.unsplash.com/photo-1509228627152-72ae9ae6848d?w=800&q=80', NULL, 0),
   ('11', '4', 'short', 'Distributions and skew',
    'Histograms and KDE show shape; skewness affects which models work. Log transform for right-skewed data. Check for multimodality and outliers.' || E'\n\n' || 'Read: https://seaborn.pydata.org/tutorial/distributions.html',
-   'Histograms, KDE, skew; log transform when needed.',
+   'Histograms and KDE show the shape of your data. Skewness affects which models work well. Use log transform for right-skewed data. Check for multimodality and outliers before modeling.',
    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80', NULL, 1),
   ('12', '4', 'note', 'Missing values',
    'Detect with .isna().sum(). Strategies: drop (dropna), fill with mean/median/mode, or impute with a model. Never ignore missingness—it can bias results.' || E'\n\n' || 'Read: https://scikit-learn.org/stable/modules/impute.html',
-   'isna(), dropna or impute; never ignore missingness.',
+   'Detect missing values with .isna().sum(). Strategies: drop with dropna(), fill with mean/median/mode, or impute with a model. Never ignore missingness—it can bias your results and hurt model performance.',
    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80', NULL, 2)
 ON CONFLICT (id) DO NOTHING;
 
@@ -74,15 +74,15 @@ ON CONFLICT (id) DO NOTHING;
 INSERT INTO content_items (id, topic_id, type, title, body, short_body, image_url, video_url, "order") VALUES
   ('13', '5', 'short', 'Choosing the right chart',
    'Bar: categories. Line: time series. Scatter: two numeric variables. Histogram: distribution. Heatmap: matrix or correlation. Match the chart to the question you are answering.' || E'\n\n' || 'Read: https://www.data-to-viz.com/',
-   'Bar, line, scatter, histogram, heatmap—match chart to question.',
+   'Bar charts for categories, line for time series, scatter for two numeric variables, histogram for distribution, heatmap for matrix or correlation. Match the chart to the question you are answering so your audience gets the message quickly.',
    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80', NULL, 0),
   ('14', '5', 'note', 'Seaborn for EDA',
    'sns.pairplot() for multi-column relationships. sns.heatmap(corr) for correlations. sns.boxplot() and sns.violinplot() for distributions by group. Great for reports and notebooks.' || E'\n\n' || 'Read: https://seaborn.pydata.org/tutorial/relational.html',
-   'pairplot, heatmap, boxplot—explore and present clearly.',
+   'Use sns.pairplot() for multi-column relationships, sns.heatmap(corr) for correlations, sns.boxplot() and sns.violinplot() for distributions by group. Great for EDA and presenting findings in reports.',
    'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=800&q=80', NULL, 1),
   ('15', '5', 'note', 'Plotly and interactivity',
    'Plotly (plotly.express) gives interactive zoom, hover, and filters. Use for dashboards and web apps. Start with px.scatter, px.line, px.histogram; same logic as matplotlib/Seaborn.' || E'\n\n' || 'Read: https://plotly.com/python/plotly-express/',
-   'Plotly: interactive plots for dashboards and web.',
+   'Plotly (plotly.express) gives interactive zoom, hover, and filters. Use it for dashboards and web apps. Start with px.scatter, px.line, px.histogram; same logic as matplotlib and Seaborn but interactive.',
    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80', NULL, 2)
 ON CONFLICT (id) DO NOTHING;
 
@@ -90,15 +90,15 @@ ON CONFLICT (id) DO NOTHING;
 INSERT INTO content_items (id, topic_id, type, title, body, short_body, image_url, video_url, "order") VALUES
   ('16', '6', 'note', 'Regression vs classification',
    'Regression: predict a number (e.g. price). Classification: predict a category (e.g. spam/not). Same workflow: features X, target y, train a model, evaluate. Choose metric: MSE/MAE for regression, accuracy/F1 for classification.' || E'\n\n' || 'Read: https://scikit-learn.org/stable/supervised_learning.html',
-   'Regression = number; classification = category. Same workflow, different metrics.',
+   'Regression predicts a number (e.g. price); classification predicts a category (e.g. spam or not). Same workflow: features X, target y, train a model, evaluate. Choose the right metric: MSE/MAE for regression, accuracy or F1 for classification.',
    'https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&q=80', NULL, 0),
   ('17', '6', 'short', 'Train and test split',
    'Use train_test_split(X, y, test_size=0.2, random_state=42). Train only on train set; evaluate on test set. Never let test data influence training (no leakage).' || E'\n\n' || 'Read: https://scikit-learn.org/stable/modules/cross_validation.html',
-   'train_test_split; train on train, evaluate on test. No leakage.',
+   'Use train_test_split to split data. Train only on the train set and evaluate on the test set. Never let test data influence training—that is leakage and gives overly optimistic results.',
    'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=800&q=80', NULL, 1),
   ('18', '6', 'note', 'Overfitting and underfitting',
    'Overfitting: model memorizes train data, poor on test. Underfitting: too simple, poor everywhere. Fix overfitting with more data, simpler model, or regularization. Fix underfitting with more features or a richer model.' || E'\n\n' || 'Read: https://scikit-learn.org/stable/auto_examples/model_selection/plot_underfitting_overfitting.html',
-   'Overfit = memorizes train; underfit = too simple. Balance with data and regularization.',
+   'Overfitting means the model memorizes train data and does poorly on test data. Underfitting means the model is too simple. Fix overfitting with more data, a simpler model, or regularization. Fix underfitting with more features or a richer model.',
    'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80', NULL, 2)
 ON CONFLICT (id) DO NOTHING;
 

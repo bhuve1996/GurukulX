@@ -12,7 +12,7 @@ function isUrl(s: string): boolean {
 export function ContentBody({ text }: { text: string }) {
   const parts = text.split(URL_REGEX);
   return (
-    <p className="whitespace-pre-line">
+    <p className="whitespace-pre-line break-words">
       {parts.map((part, i) =>
         isUrl(part) ? (
           <a
@@ -20,7 +20,7 @@ export function ContentBody({ text }: { text: string }) {
             href={part}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-neutral-900 underline hover:text-neutral-700"
+            className="break-all text-neutral-900 underline hover:text-neutral-700"
           >
             {part}
           </a>

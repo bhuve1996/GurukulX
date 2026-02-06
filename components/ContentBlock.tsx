@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { ContentItem } from "@/lib/data/types";
 import { MarkDoneButton } from "@/components/MarkDoneButton";
+import { DEFAULT_CARD_IMAGE } from "@/lib/constants";
 import { SaveButton } from "@/components/SaveButton";
 import { ItemNote } from "@/components/ItemNote";
 import { ContentBody } from "@/components/ContentBody";
@@ -45,20 +46,17 @@ function Media({ item }: ContentBlockProps) {
       </div>
     );
   }
-  if (item.imageUrl) {
-    return (
-      <figure className="my-4 w-full relative aspect-video max-h-[320px] sm:max-h-[400px] overflow-hidden rounded-lg bg-neutral-200">
-        <Image
-          src={item.imageUrl}
-          alt=""
-          fill
-          className="object-cover"
-          sizes="(max-width: 640px) 100vw, 800px"
-        />
-      </figure>
-    );
-  }
-  return null;
+  return (
+    <figure className="my-4 w-full relative aspect-video max-h-[320px] sm:max-h-[400px] overflow-hidden rounded-lg bg-neutral-200">
+      <Image
+        src={item.imageUrl || DEFAULT_CARD_IMAGE}
+        alt=""
+        fill
+        className="object-cover"
+        sizes="(max-width: 640px) 100vw, 800px"
+      />
+    </figure>
+  );
 }
 
 export function ContentBlock({ item, isDone = false, isSaved = false, initialNoteBody }: ContentBlockProps) {
@@ -79,7 +77,7 @@ export function ContentBlock({ item, isDone = false, isSaved = false, initialNot
       </h2>
       <Media item={item} />
       {item.body && (
-        <div className="mt-3 max-w-none text-neutral-700 leading-relaxed">
+        <div className="mt-3 min-w-0 max-w-full overflow-hidden text-neutral-700 leading-relaxed">
           <ContentBody text={item.body} />
         </div>
       )}

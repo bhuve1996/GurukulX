@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { FeedItem } from "@/lib/learn/feed";
 import { MarkDoneButton } from "@/components/MarkDoneButton";
+import { DEFAULT_CARD_IMAGE } from "@/lib/constants";
 
 const SWIPE_THRESHOLD = 80;
 
@@ -115,7 +116,7 @@ export function SwipeableFeed({ feed, initialIndex = 0, completedIds = [] }: Pro
         className="flex min-h-0 flex-1 flex-col transition-transform duration-150 ease-out"
         style={{ transform: `translateX(${dragOffset}px)` }}
       >
-        <article className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-lg md:max-h-[calc(100vh-140px)]">
+        <article className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-none border-0 bg-white shadow-none md:max-h-[calc(100vh-140px)] md:rounded-2xl md:border md:border-neutral-200 md:shadow-lg">
           <span className="absolute left-4 top-4 z-10 rounded-full bg-black/60 px-3 py-1 text-xs font-medium text-white">
             Part of {f.topic.name}
           </span>
@@ -126,58 +127,34 @@ export function SwipeableFeed({ feed, initialIndex = 0, completedIds = [] }: Pro
             href={contentUrl}
             className="flex h-full min-h-0 flex-1 flex-col overflow-hidden text-left no-underline outline-none"
           >
-          <div className="relative min-h-[40vh] flex-1 w-full overflow-hidden bg-neutral-200">
-            {f.item.imageUrl ? (
+            <div className="relative min-h-[45vh] flex-1 w-full overflow-hidden bg-neutral-200">
               <Image
-                src={f.item.imageUrl}
+                src={f.item.imageUrl || DEFAULT_CARD_IMAGE}
                 alt=""
                 fill
                 className="object-cover"
                 sizes="100vw"
                 priority={index < 2}
               />
-            ) : (
-              <div className="flex h-full min-h-[200px] w-full items-center justify-center bg-neutral-200 text-5xl font-semibold text-neutral-400">
-                {f.item.title.trim().charAt(0).toUpperCase() || "?"}
-              </div>
-            )}
-          </div>
-          <div className="flex flex-shrink-0 flex-col p-4 sm:p-5">
-            <h2 className="text-lg font-semibold text-neutral-900 line-clamp-2 sm:text-xl">
-              {f.item.title}
-            </h2>
-            <p className="mt-2 line-clamp-4 text-sm text-neutral-600 sm:line-clamp-5">
-              {shortText}
-            </p>
-            <span className="mt-3 inline-flex items-center text-sm font-medium text-neutral-900">
-              Read full
-              <svg className="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </span>
-          </div>
-        </Link>
+            </div>
+            <div className="flex flex-shrink-0 flex-col p-4 sm:p-5">
+              <h2 className="text-lg font-semibold text-neutral-900 line-clamp-2 sm:text-xl">
+                {f.item.title}
+              </h2>
+              <p className="mt-2 min-h-[3rem] flex-1 overflow-y-auto text-sm leading-relaxed text-neutral-600">
+                {shortText}
+              </p>
+            </div>
+            <div className="absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-black/70 to-transparent px-4 py-4 pt-8">
+              <span className="inline-flex items-center text-sm font-medium text-white">
+                Tap to know more
+                <svg className="ml-1.5 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
+            </div>
+          </Link>
       </article>
-      </div>
-
-      <div className="flex shrink-0 items-center justify-between gap-3 px-1 py-3">
-        <button
-          type="button"
-          onClick={goPrev}
-          className="min-h-[48px] min-w-[44px] rounded-xl border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
-        >
-          Previous
-        </button>
-        <span className="text-sm text-neutral-500">
-          {index + 1} / {feed.length}
-        </span>
-        <button
-          type="button"
-          onClick={goNext}
-          className="min-h-[48px] min-w-[44px] rounded-xl bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800"
-        >
-          Next
-        </button>
       </div>
     </div>
   );
