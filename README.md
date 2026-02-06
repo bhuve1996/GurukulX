@@ -27,6 +27,17 @@ Default data adapter is `memory` (no DB). To use Supabase:
 2. Add the adapter name to `lib/config` and register it in `lib/data/index.ts`.
 3. Set `DATA_ADAPTER=<name>` in env. No changes in app or components.
 
+## Install on your iPhone (PWA)
+
+GurukulX is a **Progressive Web App**: you can add it to your home screen and open it like an app.
+
+1. Open the site in **Safari** on your iPhone (e.g. your deployed URL or `https://your-domain.com`).
+2. Tap the **Share** button (square with arrow).
+3. Scroll and tap **Add to Home Screen**.
+4. Tap **Add**. An icon appears on your home screen; opening it launches GurukulX in standalone mode (no browser UI).
+
+**Note:** For “Add to Home Screen” to work, the site must be served over **HTTPS** (e.g. Vercel, or your own SSL). `localhost` works for testing in Safari on your computer, but not for installing on the phone unless you use a tunnel (e.g. ngrok) or deploy first.
+
 ## Cursor rules
 
 - `.cursor/rules/layered-config-driven.mdc` — always apply: layered, config-driven; no direct DB in UI.

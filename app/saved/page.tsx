@@ -2,6 +2,8 @@ import Link from "next/link";
 import { getDataAdapter } from "@/lib/data";
 import { getCurrentUserId } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+
 export default async function SavedPage() {
   const userId = await getCurrentUserId();
   const adapter = getDataAdapter();

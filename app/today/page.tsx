@@ -2,6 +2,8 @@ import Link from "next/link";
 import { getDataAdapter } from "@/lib/data";
 import { ContentBlock } from "@/components/ContentBlock";
 
+export const dynamic = "force-dynamic";
+
 export default async function TodayPage() {
   const adapter = getDataAdapter();
   const tracks = await adapter.tracks.list();

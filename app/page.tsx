@@ -3,6 +3,8 @@ import { getDataAdapter } from "@/lib/data";
 import { getCurrentUserId } from "@/lib/auth";
 import { getContinueLink, getNextHref, formatNextLink } from "@/lib/learn/next";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const adapter = getDataAdapter();
   const userId = await getCurrentUserId();

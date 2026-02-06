@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { getDataAdapter } from "@/lib/data";
 
+export const dynamic = "force-dynamic";
+
 export default async function LearnPage() {
   const adapter = getDataAdapter();
   const tracks = await adapter.tracks.list();
