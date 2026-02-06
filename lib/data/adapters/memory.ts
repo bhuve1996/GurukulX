@@ -39,6 +39,7 @@ const content: ContentItem[] = [
     type: "note",
     title: "Why Python for AI?",
     body: "Python is the go-to language for AI and ML: clear syntax, huge ecosystem (NumPy, PyTorch, TensorFlow), and great community. Start here.",
+    shortBody: "Python: clear syntax, huge ecosystem (NumPy, PyTorch, TensorFlow), great community. Start here.",
     imageUrl: "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=800&q=80",
     videoUrl: null,
     order: 0,
@@ -49,6 +50,7 @@ const content: ContentItem[] = [
     type: "short",
     title: "Variables and types",
     body: "Use clear names. Prefer type hints: `name: str`, `count: int`. Keep it readable.",
+    shortBody: "Clear names. Prefer type hints: name: str, count: int. Keep it readable.",
     imageUrl: null,
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     order: 1,
@@ -59,11 +61,15 @@ const content: ContentItem[] = [
     type: "note",
     title: "Your first script",
     body: "Create a `.py` file, run with `python file.py`. Use `print()` to see output. Small steps.",
+    shortBody: "Create a .py file, run with python file.py. Use print() to see output.",
     imageUrl: null,
     videoUrl: null,
     order: 2,
   },
 ];
+
+/** userId -> Set of completed itemIds */
+const progressStore = new Map<string, Set<string>>();
 
 const memoryAdapter: DataAdapter = {
   tracks: {
@@ -81,6 +87,23 @@ const memoryAdapter: DataAdapter = {
   content: {
     listByTopicId: async (topicId) =>
       content.filter((c) => c.topicId === topicId).sort((a, b) => a.order - b.order),
+    getById: async (itemId) => content.find((c) => c.id === itemId) ?? null,
+  },
+  progress: {
+    markDone: async (userId, itemId) => {
+      let set = progressStore.get(userId);
+      if (!set) {
+        set = new Set();
+        progressStore.set(userId, set);
+      }
+      set.add(itemId);
+    },
+    listCompletedItemIds: async (userId, topicId) => {
+      const set = progressStore.get(userId);
+      if (!set) return [];
+      return content.filter((c) => c.topicId === topicId && set!.has(c.id)).map((c) => c.id);
+    },
+    isDone: async (userId, itemId) => progressStore.get(userId)?.has(itemId) ?? false,
   },
 };
 

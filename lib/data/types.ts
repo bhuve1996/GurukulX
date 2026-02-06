@@ -33,14 +33,16 @@ export interface ContentItem {
   type: "note" | "short" | "quiz" | "practice";
   title: string;
   body: string | null;
-  /** Optional image URL (relative or absolute). */
+  /** Short for every item: concise summary that gives the whole idea. Used for short cards (image + title + text). */
+  shortBody?: string | null;
+  /** Image for the short card. If missing, UI shows a placeholder (e.g. first letter). */
   imageUrl?: string | null;
-  /** Optional video URL (embed or direct). */
+  /** Optional video URL (embed or direct) for full content. */
   videoUrl?: string | null;
   order: number;
 }
 
-/** Contract for all read/write the app needs. Implement per DB (Supabase, Prisma, etc.). */
+/** Progress is per user (guest or authenticated). */
 export interface DataAdapter {
   tracks: {
     list(): Promise<Track[]>;
@@ -54,6 +56,11 @@ export interface DataAdapter {
   };
   content: {
     listByTopicId(topicId: string): Promise<ContentItem[]>;
+    getById?(itemId: string): Promise<ContentItem | null>;
   };
-  // Auth and saves can be added here; adapters implement accordingly
+  progress: {
+    markDone(userId: string, itemId: string): Promise<void>;
+    listCompletedItemIds(userId: string, topicId: string): Promise<string[]>;
+    isDone(userId: string, itemId: string): Promise<boolean>;
+  };
 }
