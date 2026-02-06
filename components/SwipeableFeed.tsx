@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { FeedItem } from "@/lib/learn/feed";
 
-const SWIPE_THRESHOLD = 60;
+const SWIPE_THRESHOLD = 80;
 
 type Props = {
   feed: FeedItem[];
@@ -21,26 +21,60 @@ export function SwipeableFeed({ feed, initialIndex = 0 }: Props) {
   const [index, setIndex] = useState(() =>
     Math.min(Math.max(0, initialIndex), Math.max(0, feed.length - 1))
   );
-  const touchStartY = useRef(0);
+  const touchStartX = useRef(0);
+  const [dragOffset, setDragOffset] = useState(0);
 
   const goNext = useCallback(() => {
+    setDragOffset(0);
     setIndex((i) => (i + 1) % Math.max(1, feed.length));
   }, [feed.length]);
 
   const goPrev = useCallback(() => {
+    setDragOffset(0);
     setIndex((i) => (i - 1 + feed.length) % Math.max(1, feed.length));
   }, [feed.length]);
 
   const onTouchStart = useCallback((e: React.TouchEvent) => {
-    touchStartY.current = e.touches[0].clientY;
+    touchStartX.current = e.touches[0].clientX;
+  }, []);
+
+  const onTouchMove = useCallback((e: React.TouchEvent) => {
+    const x = e.touches[0].clientX;
+    const delta = x - touchStartX.current;
+    // Cap drag for a bit of resistance at the edges
+    const capped = Math.max(-200, Math.min(200, delta));
+    setDragOffset(capped);
   }, []);
 
   const onTouchEnd = useCallback(
     (e: React.TouchEvent) => {
-      const endY = e.changedTouches[0].clientY;
-      const delta = touchStartY.current - endY;
-      if (delta > SWIPE_THRESHOLD) goNext();
-      else if (delta < -SWIPE_THRESHOLD) goPrev();
+      const endX = e.changedTouches[0].clientX;
+      const deltaX = touchStartX.current - endX;
+      if (deltaX > SWIPE_THRESHOLD) goNext();
+      else if (deltaX < -SWIPE_THRESHOLD) goPrev();
+      else setDragOffset(0);
+    },
+    [goNext, goPrev]
+  );
+
+  const onMouseDown = useCallback((e: React.MouseEvent) => {
+    touchStartX.current = e.clientX;
+    setDragOffset(0);
+  }, []);
+
+  const onMouseMove = useCallback((e: React.MouseEvent) => {
+    if (e.buttons !== 1) return;
+    const delta = e.clientX - touchStartX.current;
+    const capped = Math.max(-200, Math.min(200, delta));
+    setDragOffset(capped);
+  }, []);
+
+  const onMouseUp = useCallback(
+    (e: React.MouseEvent) => {
+      const deltaX = touchStartX.current - e.clientX;
+      if (deltaX > SWIPE_THRESHOLD) goNext();
+      else if (deltaX < -SWIPE_THRESHOLD) goPrev();
+      else setDragOffset(0);
     },
     [goNext, goPrev]
   );
@@ -62,16 +96,25 @@ export function SwipeableFeed({ feed, initialIndex = 0 }: Props) {
 
   return (
     <div
-      className="flex h-full min-h-0 flex-col"
+      className="flex h-full min-h-0 flex-col overflow-hidden"
       style={{ touchAction: "pan-y" }}
       onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
+      onMouseDown={onMouseDown}
+      onMouseMove={onMouseMove}
+      onMouseLeave={() => setDragOffset(0)}
+      onMouseUp={onMouseUp}
     >
-      <article className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-lg md:max-h-[calc(100vh-140px)]">
-        <Link
-          href={contentUrl}
-          className="flex h-full min-h-0 flex-1 flex-col overflow-hidden text-left no-underline outline-none"
-        >
+      <div
+        className="flex min-h-0 flex-1 flex-col transition-transform duration-150 ease-out"
+        style={{ transform: `translateX(${dragOffset}px)` }}
+      >
+        <article className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-lg md:max-h-[calc(100vh-140px)]">
+          <Link
+            href={contentUrl}
+            className="flex h-full min-h-0 flex-1 flex-col overflow-hidden text-left no-underline outline-none"
+          >
           <span className="absolute left-4 top-4 z-10 rounded-full bg-black/60 px-3 py-1 text-xs font-medium text-white">
             Part of {f.topic.name}
           </span>
@@ -107,6 +150,7 @@ export function SwipeableFeed({ feed, initialIndex = 0 }: Props) {
           </div>
         </Link>
       </article>
+      </div>
 
       <div className="flex shrink-0 items-center justify-between gap-3 px-1 py-3">
         <button
