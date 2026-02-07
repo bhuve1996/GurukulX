@@ -6,6 +6,7 @@ import Link from "next/link";
 import type { ContentItem } from "@/lib/data/types";
 import { MarkDoneButton } from "@/components/MarkDoneButton";
 import { DEFAULT_CARD_IMAGE } from "@/lib/constants";
+import { ui } from "@/lib/config";
 
 function normalizeEmbedUrl(url: string): string {
   if (/youtube\.com\/embed\//.test(url) || /vimeo\.com\/video\//.test(url)) return url;
@@ -47,7 +48,7 @@ export function ShortsStack({
   if (!item) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center p-4">
-        <p className="text-neutral-500">No items in this topic.</p>
+        <p className="text-neutral-500">{ui.shortsStack.noItemsInTopic}</p>
       </div>
     );
   }
@@ -113,20 +114,20 @@ export function ShortsStack({
             onClick={goPrev}
             className="min-h-[48px] rounded-xl border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
           >
-            Previous
+            {ui.shortsStack.previous}
           </button>
           <Link
             href={detailUrl}
             className="min-h-[48px] rounded-xl border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 no-underline hover:bg-neutral-50"
           >
-            View full
+            {ui.shortsStack.viewFull}
           </Link>
           <button
             type="button"
             onClick={goNext}
             className="min-h-[48px] rounded-xl bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800"
           >
-            Next
+            {ui.shortsStack.next}
           </button>
         </div>
       </div>

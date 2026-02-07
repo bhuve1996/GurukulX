@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getDataAdapter } from "@/lib/data";
 import { notFound } from "next/navigation";
+import { ui } from "@/lib/config";
 
 export default async function PhasePage({
   params,
@@ -20,7 +21,7 @@ export default async function PhasePage({
   return (
     <div>
       <nav className="text-sm text-neutral-500">
-        <Link href="/learn" className="hover:text-neutral-700">Learn</Link>
+        <Link href="/learn" className="hover:text-neutral-700">{ui.nav.learn}</Link>
         <span className="mx-2">/</span>
         <Link href={`/learn/${track.slug}`} className="hover:text-neutral-700">{track.name}</Link>
         <span className="mx-2">/</span>
@@ -30,9 +31,9 @@ export default async function PhasePage({
         {phase.name}
       </h1>
       <p className="mt-1 text-neutral-600">
-        Topics in this phase.
+        {ui.phasePage.topicsInPhase}
         {phase.estimatedDays != null && (
-          <span className="ml-1 font-medium text-neutral-700">~{phase.estimatedDays} days</span>
+          <span className="ml-1 font-medium text-neutral-700"> {ui.phasePage.days(phase.estimatedDays)}</span>
         )}
       </p>
       <ul className="mt-6 grid gap-3 sm:grid-cols-2">
@@ -44,7 +45,7 @@ export default async function PhasePage({
             >
               <span>{topic.name}</span>
               {topic.estimatedDays != null && (
-                <span className="text-sm font-normal text-neutral-500">~{topic.estimatedDays} days</span>
+                <span className="text-sm font-normal text-neutral-500">{ui.trackPage.days(topic.estimatedDays)}</span>
               )}
             </Link>
           </li>

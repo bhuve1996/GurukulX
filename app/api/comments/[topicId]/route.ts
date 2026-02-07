@@ -1,5 +1,6 @@
 import { getDataAdapter } from "@/lib/data";
 import { getUserIdFromRequest } from "@/lib/auth";
+import { ui } from "@/lib/config";
 
 export async function GET(
   _request: Request,
@@ -16,16 +17,16 @@ export async function POST(
   { params }: { params: Promise<{ topicId: string }> }
 ) {
   const userId = getUserIdFromRequest(request);
-  if (!userId) return new Response(JSON.stringify({ error: "No user" }), { status: 401 });
+  if (!userId) return new Response(JSON.stringify({ error: ui.api.noUser }), { status: 401 });
   const { topicId } = await params;
   let body: { body?: string };
   try {
     body = await request.json();
   } catch {
-    return new Response(JSON.stringify({ error: "Invalid JSON" }), { status: 400 });
+    return new Response(JSON.stringify({ error: ui.api.invalidJson }), { status: 400 });
   }
   const text = typeof body.body === "string" ? (body.body as string).trim() : "";
-  if (!text) return new Response(JSON.stringify({ error: "body required" }), { status: 400 });
+  if (!text) return new Response(JSON.stringify({ error: ui.api.bodyRequired }), { status: 400 });
   const adapter = getDataAdapter();
   const comment = await adapter.comments.add(topicId, userId, text);
   return new Response(JSON.stringify({ comment }), { status: 201, headers: { "Content-Type": "application/json" } });

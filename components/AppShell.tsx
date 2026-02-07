@@ -1,10 +1,11 @@
 import Link from "next/link";
+import { ui } from "@/lib/config";
 
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/learn", label: "Learn" },
-  { href: "/today", label: "Today" },
-  { href: "/saved", label: "Saved" },
+  { href: "/", label: ui.nav.home },
+  { href: "/learn", label: ui.nav.learn },
+  { href: "/today", label: ui.nav.today },
+  { href: "/saved", label: ui.nav.saved },
 ] as const;
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -16,9 +17,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             href="/"
             className="text-base font-semibold text-neutral-900 no-underline hover:text-neutral-700"
           >
-            GurukulX
+            {ui.site.name}
           </Link>
-          <nav className="flex items-center gap-0.5 sm:gap-2" aria-label="Main">
+          <nav className="flex items-center gap-0.5 sm:gap-2" aria-label={ui.nav.mainAria}>
             {navLinks.map(({ href, label }) => (
               <Link
                 key={href}

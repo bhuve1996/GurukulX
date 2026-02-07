@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { AppShell } from "@/components/AppShell";
+import { ui } from "@/lib/config";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -11,12 +12,12 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "GurukulX",
-  description: "Learn AI — notes, shorts, quizzes, practice.",
+  title: ui.site.name,
+  description: ui.site.description,
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "GurukulX",
+    title: ui.site.name,
   },
 };
 

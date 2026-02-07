@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ContentItem } from "@/lib/data/types";
 import { DEFAULT_CARD_IMAGE } from "@/lib/constants";
+import { ui } from "@/lib/config";
 
 type Props = {
   item: ContentItem;
@@ -21,11 +22,11 @@ export function ShortCard({ item, topicName, isDone }: Props) {
       className="group relative block overflow-hidden rounded-xl border border-neutral-200 bg-white text-left no-underline shadow-sm transition hover:border-neutral-300 hover:shadow"
     >
       <span className="absolute left-3 top-3 z-10 rounded bg-black/60 px-2 py-0.5 text-xs font-medium text-white">
-        Part of {topicName}
+        {ui.feed.partOf} {topicName}
       </span>
       {isDone && (
         <span className="absolute right-3 top-3 z-10 rounded-full bg-green-600 px-2 py-0.5 text-xs font-medium text-white">
-          ✓ Done
+          ✓ {ui.feed.done}
         </span>
       )}
       <div className="relative aspect-video w-full overflow-hidden bg-neutral-200">
@@ -43,7 +44,7 @@ export function ShortCard({ item, topicName, isDone }: Props) {
       </div>
       <span
         className="absolute bottom-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-neutral-900 text-white shadow transition group-hover:bg-neutral-700"
-        aria-label="Read full content"
+        aria-label={ui.feed.readFullContent}
       >
         <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />

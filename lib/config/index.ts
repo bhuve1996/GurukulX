@@ -32,3 +32,4 @@ function getConfig() {
 }
 
 export const config = getConfig();
+export { ui } from "./ui";

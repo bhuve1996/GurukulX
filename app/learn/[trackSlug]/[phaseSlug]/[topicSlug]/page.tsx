@@ -6,6 +6,7 @@ import { ContentBlock } from "@/components/ContentBlock";
 import { ShortCard } from "@/components/ShortCard";
 import { TopicComments } from "@/components/TopicComments";
 import { getNextForTopicPage, getNextHref, formatNextLink } from "@/lib/learn/next";
+import { ui } from "@/lib/config";
 
 export default async function TopicPage({
   params,
@@ -48,7 +49,7 @@ export default async function TopicPage({
   return (
     <div>
       <nav className="text-sm text-neutral-500">
-        <Link href="/learn" className="hover:text-neutral-700">Learn</Link>
+        <Link href="/learn" className="hover:text-neutral-700">{ui.nav.learn}</Link>
         <span className="mx-2">/</span>
         <Link href={`/learn/${track.slug}`} className="hover:text-neutral-700">{track.name}</Link>
         <span className="mx-2">/</span>
@@ -63,24 +64,24 @@ export default async function TopicPage({
         {items.length > 0 ? (
           <>
             <span className="font-medium text-neutral-700">
-              {completedIds.length} of {items.length} done
+              {ui.topicPage.ofDone(completedIds.length, items.length)}
             </span>
             {topic.estimatedDays != null && (
-              <> · ~{topic.estimatedDays} days</>
+              <> · {ui.phasePage.days(topic.estimatedDays)}</>
             )}
             {" · "}
-            Tap a short for full content.
+            {ui.topicPage.tapShortForFull}
           </>
         ) : (
-          topic.estimatedDays != null ? `~${topic.estimatedDays} days · Shorts and full content.` : "Shorts and full content for this topic."
+          topic.estimatedDays != null ? ui.topicPage.shortsAndContentWithDays(topic.estimatedDays) : ui.topicPage.shortsAndContent
         )}
       </p>
 
       {/* Shorts first (default): each item = image + title + short text, tag "Part of [Topic]" */}
       {items.length > 0 && (
-        <section className="mt-6" aria-label="Shorts">
+        <section className="mt-6" aria-label={ui.topicPage.shortsAria}>
           <p className="mb-3 text-sm font-medium text-neutral-500">
-            Coming under this topic — tap any card or the expand icon for full content
+            {ui.topicPage.comingUnderTopic}
           </p>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {items.map((item) => (
@@ -96,15 +97,15 @@ export default async function TopicPage({
       )}
 
       {/* Full content: scroll target for each item */}
-      <section className="mt-10" id="full-content" aria-label="Full content">
-        <h2 className="text-lg font-semibold text-neutral-800">Full content</h2>
+      <section className="mt-10" id="full-content" aria-label={ui.topicPage.fullContent}>
+        <h2 className="text-lg font-semibold text-neutral-800">{ui.topicPage.fullContent}</h2>
         <p className="mt-1 text-sm text-neutral-500">
-          Read in detail or mark as done.
+          {ui.topicPage.readInDetail}
         </p>
         <div className="mt-4 space-y-6 max-w-content">
           {items.length === 0 ? (
             <p className="rounded-xl border border-dashed border-neutral-300 bg-neutral-50 p-6 text-center text-neutral-500">
-              No content here yet. Check back soon.
+              {ui.topicPage.noContentHereYet}
             </p>
           ) : (
             items.map((item) => {
@@ -125,7 +126,7 @@ export default async function TopicPage({
 
       {nextHref && (
         <p className="mt-6">
-          <span className="text-neutral-500">What&apos;s next: </span>
+          <span className="text-neutral-500">{ui.topicPage.whatsNext} </span>
           <Link href={nextHref} className="font-medium text-neutral-700 hover:text-neutral-900">
             {formatNextLink(nextLink!)}
           </Link>
@@ -137,7 +138,7 @@ export default async function TopicPage({
           href={`/learn/${track.slug}/${phase.slug}/${topic.slug}/shorts`}
           className="text-sm font-medium text-neutral-600 hover:text-neutral-900"
         >
-          Play shorts in sequence →
+          {ui.topicPage.playShortsInSequence} →
         </Link>
       </div>
 

@@ -3,6 +3,7 @@ import { getDataAdapter } from "@/lib/data";
 import { getCurrentUserId } from "@/lib/auth";
 import { getFeed } from "@/lib/learn/feed";
 import { ContentBlock } from "@/components/ContentBlock";
+import { ui } from "@/lib/config";
 
 export const dynamic = "force-dynamic";
 
@@ -69,7 +70,7 @@ export default async function TodayPage() {
         </div>
       ) : (
         <p className="mt-6 rounded-xl border border-dashed border-neutral-300 bg-neutral-50 p-6 text-center text-neutral-500">
-          No content yet. Browse <Link href="/learn" className="underline">Learn</Link> or start on <Link href="/" className="underline">Home</Link>.
+          {ui.today.noContentYet} <Link href="/learn" className="underline">{ui.nav.learn}</Link> {ui.today.orStartOn} <Link href="/" className="underline">{ui.nav.home}</Link>.
         </p>
       )}
     </div>

@@ -18,9 +18,17 @@ const TABLES = {
   topicComments: "topic_comments",
 } as const;
 
+let clientInstance: ReturnType<typeof createClient> | null = null;
+
 function getClient() {
+  if (clientInstance) return clientInstance;
   const { url, anonKey } = config.supabase;
-  return createClient(url, anonKey);
+  clientInstance = createClient(url, anonKey, {
+    global: {
+      fetch: (url, init) => fetch(url, { ...init, cache: "no-store" }),
+    },
+  });
+  return clientInstance;
 }
 
 function mapRow<T>(row: Record<string, unknown>): T {
@@ -139,13 +147,18 @@ const supabaseAdapter: DataAdapter = {
       if (error) throw new Error(error.message);
     },
     listCompletedItemIds: async (userId, topicId) => {
-      const [{ data: progressData, error: progressError }, { data: topicData, error: topicError }] = await Promise.all([
-        getClient().from(TABLES.userProgress).select("item_id").eq("user_id", userId),
-        getClient().from(TABLES.content).select("id").eq("topic_id", topicId),
-      ]);
-      if (progressError) throw new Error(progressError.message);
+      const client = getClient();
+      const { data: topicData, error: topicError } = await client
+        .from(TABLES.content)
+        .select("id")
+        .eq("topic_id", topicId);
       if (topicError) throw new Error(topicError.message);
       const topicItemIds = new Set((topicData ?? []).map((r: { id: string }) => r.id));
+      const { data: progressData, error: progressError } = await client
+        .from(TABLES.userProgress)
+        .select("item_id")
+        .eq("user_id", userId);
+      if (progressError) throw new Error(progressError.message);
       return (progressData ?? []).map((r: { item_id: string }) => r.item_id).filter((id: string) => topicItemIds.has(id));
     },
     isDone: async (userId, itemId) => {

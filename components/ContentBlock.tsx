@@ -5,6 +5,7 @@ import { DEFAULT_CARD_IMAGE } from "@/lib/constants";
 import { SaveButton } from "@/components/SaveButton";
 import { ItemNote } from "@/components/ItemNote";
 import { ContentBody } from "@/components/ContentBody";
+import { ui } from "@/lib/config";
 
 type ContentBlockProps = {
   item: ContentItem;
@@ -40,7 +41,7 @@ function Media({ item }: ContentBlockProps) {
             className="h-full w-full"
             preload="metadata"
           >
-            Your browser does not support video.
+            {ui.contentBlock.videoNotSupported}
           </video>
         )}
       </div>

@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ui } from "@/lib/config";
 
 type Props = { itemId: string; isSaved: boolean };
 
@@ -36,8 +37,8 @@ export function SaveButton({ itemId, isSaved }: Props) {
       onClick={toggle}
       disabled={loading}
       className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border border-neutral-300 bg-white p-2 text-neutral-600 hover:bg-neutral-50 disabled:opacity-60"
-      aria-label={saved ? "Unsave" : "Save"}
-      title={saved ? "Unsave" : "Save for later"}
+      aria-label={saved ? ui.saveButton.ariaUnsave : ui.saveButton.ariaSave}
+      title={saved ? ui.saveButton.titleUnsave : ui.saveButton.titleSave}
     >
       {saved ? (
         <svg className="h-5 w-5 fill-amber-500 text-amber-500" viewBox="0 0 24 24" fill="currentColor">

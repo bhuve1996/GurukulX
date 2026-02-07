@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getDataAdapter } from "@/lib/data";
+import { ui } from "@/lib/config";
 
 export const dynamic = "force-dynamic";
 
@@ -9,8 +10,8 @@ export default async function LearnPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-neutral-900 sm:text-3xl">Learn</h1>
-      <p className="mt-1 text-neutral-600">Pick a track and follow the path.</p>
+      <h1 className="text-2xl font-bold text-neutral-900 sm:text-3xl">{ui.learn.title}</h1>
+      <p className="mt-1 text-neutral-600">{ui.learn.subtitle}</p>
       <ul className="mt-6 grid gap-4 sm:grid-cols-2">
         {tracks.map((track) => (
           <li key={track.id}>

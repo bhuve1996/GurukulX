@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { TopicComment } from "@/lib/data/types";
+import { ui } from "@/lib/config";
 
 type Props = { topicId: string };
 
@@ -51,14 +52,14 @@ export function TopicComments({ topicId }: Props) {
   }
 
   return (
-    <section className="mt-8 rounded-xl border border-neutral-200 bg-white p-4 sm:p-6" aria-label="Discussion">
-      <h2 className="text-lg font-semibold text-neutral-900">Discussion</h2>
-      <p className="mt-1 text-sm text-neutral-500">Ask or share with others learning this topic.</p>
+    <section className="mt-8 rounded-xl border border-neutral-200 bg-white p-4 sm:p-6" aria-label={ui.comments.discussion}>
+      <h2 className="text-lg font-semibold text-neutral-900">{ui.comments.discussion}</h2>
+      <p className="mt-1 text-sm text-neutral-500">{ui.comments.askOrShare}</p>
       <form onSubmit={postComment} className="mt-4">
         <textarea
           value={newBody}
           onChange={(e) => setNewBody(e.target.value)}
-          placeholder="Add a comment..."
+          placeholder={ui.comments.placeholder}
           rows={2}
           className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 placeholder-neutral-400"
           disabled={posting}
@@ -68,13 +69,13 @@ export function TopicComments({ topicId }: Props) {
           disabled={!newBody.trim() || posting}
           className="mt-2 rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-50"
         >
-          {posting ? "Posting..." : "Post comment"}
+          {posting ? ui.comments.posting : ui.comments.postComment}
         </button>
       </form>
       {loading ? (
-        <p className="mt-4 text-sm text-neutral-500">Loading...</p>
+        <p className="mt-4 text-sm text-neutral-500">{ui.comments.loading}</p>
       ) : comments.length === 0 ? (
-        <p className="mt-4 text-sm text-neutral-500">No comments yet. Be the first!</p>
+        <p className="mt-4 text-sm text-neutral-500">{ui.comments.noCommentsYet}</p>
       ) : (
         <ul className="mt-4 space-y-3">
           {comments.map((c) => (

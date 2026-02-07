@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ui } from "@/lib/config";
 
 type Props = { itemId: string; isDone: boolean };
 
@@ -34,7 +35,7 @@ export function MarkDoneButton({ itemId, isDone }: Props) {
     return (
       <button
         type="button"
-        aria-label="Marked as done"
+        aria-label={ui.markDone.ariaMarkedDone}
         className="inline-flex min-h-[36px] min-w-[36px] sm:min-h-[44px] sm:min-w-[44px] items-center justify-center rounded-full bg-green-100 text-green-700 hover:bg-green-200 transition-colors"
       >
         <svg className={iconClass} fill="currentColor" viewBox="0 0 20 20" aria-hidden>
@@ -49,7 +50,7 @@ export function MarkDoneButton({ itemId, isDone }: Props) {
       type="button"
       onClick={handleMarkDone}
       disabled={loading}
-      aria-label="Mark as done"
+      aria-label={ui.markDone.ariaMarkDone}
       className="inline-flex min-h-[36px] min-w-[36px] sm:min-h-[44px] sm:min-w-[44px] items-center justify-center rounded-full border border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50 hover:border-neutral-400 disabled:opacity-60 transition-colors"
     >
       {loading ? (

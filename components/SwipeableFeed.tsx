@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { FeedItem } from "@/lib/learn/feed";
 import { MarkDoneButton } from "@/components/MarkDoneButton";
+import { ui } from "@/lib/config";
 import { DEFAULT_CARD_IMAGE } from "@/lib/constants";
 
 function useShare(contentUrl: string, title: string) {
@@ -119,16 +120,23 @@ export function SwipeableFeed({ feed, initialIndex = 0, completedIds = [] }: Pro
   if (!feed.length) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center p-4">
-        <p className="text-neutral-500">No content in the feed yet.</p>
+        <p className="text-neutral-500">{ui.feed.noContentInFeed}</p>
         <Link href="/learn" className="ml-2 text-neutral-900 underline">
-          Browse Learn
+          {ui.feed.browseLearn}
         </Link>
       </div>
     );
   }
 
   const f = feed[index];
-  const shortText = f.item.shortBody ?? f.item.body ?? "";
+  const rawShort = f.item.shortBody ?? "";
+  const rawBody = f.item.body ?? "";
+  const shortText =
+    rawShort.length >= 120
+      ? rawShort
+      : rawBody.length > 0
+        ? rawBody
+        : rawShort;
   const isDone = completedSet.has(f.item.id);
 
   return (
@@ -149,13 +157,13 @@ export function SwipeableFeed({ feed, initialIndex = 0, completedIds = [] }: Pro
       >
         <article className="relative flex h-full min-h-0 flex-1 flex-col overflow-hidden rounded-none border-0 bg-white shadow-none md:max-h-[calc(100vh-120px)] md:rounded-2xl md:border md:border-neutral-200 md:shadow-lg">
           <span className="absolute left-3 top-3 z-10 rounded-full bg-black/60 px-2.5 py-0.5 text-xs font-medium text-white">
-            Part of {f.topic.name}
+            {ui.feed.partOf} {f.topic.name}
           </span>
           <div className="absolute right-3 top-3 z-10 flex items-center gap-1.5">
             <button
               type="button"
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleShare(); }}
-              aria-label="Share"
+              aria-label={ui.feed.shareAria}
               className="inline-flex min-h-[36px] min-w-[36px] sm:min-h-[44px] sm:min-w-[44px] items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
             >
               <svg className="h-5 w-5 sm:h-5 sm:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -188,7 +196,7 @@ export function SwipeableFeed({ feed, initialIndex = 0, completedIds = [] }: Pro
             </div>
             <div className="flex flex-shrink-0 items-center justify-center gap-1.5 border-t border-neutral-200 bg-neutral-50 px-4 py-3">
               <span className="text-xs font-medium text-neutral-600 sm:text-sm">
-                Tap to know more
+                {ui.feed.tapToKnowMore}
               </span>
               <svg className="h-3.5 w-3.5 text-neutral-500 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

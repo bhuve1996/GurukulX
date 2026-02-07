@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getDataAdapter } from "@/lib/data";
 import { getCurrentUserId } from "@/lib/auth";
+import { ui } from "@/lib/config";
 
 export const dynamic = "force-dynamic";
 
@@ -11,10 +12,10 @@ export default async function SavedPage() {
   if (!userId) {
     return (
       <div className="max-w-content mx-auto">
-        <h1 className="text-2xl font-bold text-neutral-900 sm:text-3xl">Saved</h1>
-        <p className="mt-2 text-neutral-600">Save items to see them here.</p>
+        <h1 className="text-2xl font-bold text-neutral-900 sm:text-3xl">{ui.saved.title}</h1>
+        <p className="mt-2 text-neutral-600">{ui.saved.saveItemsToSee}</p>
         <Link href="/learn" className="mt-6 inline-block rounded-xl border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 no-underline hover:bg-neutral-50">
-          Browse Learn →
+          {ui.saved.browseLearn} →
         </Link>
       </div>
     );
@@ -39,11 +40,9 @@ export default async function SavedPage() {
 
   return (
     <div className="max-w-content mx-auto">
-      <h1 className="text-2xl font-bold text-neutral-900 sm:text-3xl">Saved</h1>
+      <h1 className="text-2xl font-bold text-neutral-900 sm:text-3xl">{ui.saved.title}</h1>
       <p className="mt-2 text-neutral-600">
-        {list.length === 0
-          ? "No saved items yet. Use the star on any content to save it."
-          : `${list.length} saved item${list.length === 1 ? "" : "s"}.`}
+        {list.length === 0 ? ui.saved.noSavedYet : ui.saved.savedCount(list.length)}
       </p>
       {list.length > 0 && (
         <ul className="mt-6 space-y-3">
@@ -63,7 +62,7 @@ export default async function SavedPage() {
         </ul>
       )}
       <Link href="/learn" className="mt-6 inline-block text-sm font-medium text-neutral-600 hover:text-neutral-900">
-        Browse Learn →
+        {ui.saved.browseLearn} →
       </Link>
     </div>
   );

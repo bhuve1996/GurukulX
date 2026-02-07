@@ -2,6 +2,7 @@
 
 import { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { ui } from "@/lib/config";
 
 const PULL_THRESHOLD = 70;
 const PULL_ZONE_TOP = 100;
@@ -77,7 +78,7 @@ export function PullToRefresh({ children }: Props) {
       >
         <div className="flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 shadow-sm">
           {isRefreshing ? (
-            <span className="text-sm font-medium text-neutral-600">Refreshing…</span>
+            <span className="text-sm font-medium text-neutral-600">{ui.pullToRefresh.refreshing}</span>
           ) : (
             <>
               <svg
@@ -94,7 +95,7 @@ export function PullToRefresh({ children }: Props) {
                 />
               </svg>
               <span className="text-sm font-medium text-neutral-600">
-                {pullDistance >= PULL_THRESHOLD ? "Release to refresh" : "Pull to refresh"}
+                {pullDistance >= PULL_THRESHOLD ? ui.pullToRefresh.release : ui.pullToRefresh.pull}
               </span>
             </>
           )}

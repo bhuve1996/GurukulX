@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ui } from "@/lib/config";
 
 type Props = { itemId: string; initialBody: string | null | undefined };
 
@@ -30,17 +31,17 @@ export function ItemNote({ itemId, initialBody }: Props) {
 
   return (
     <div className="mt-4 rounded-lg border border-neutral-200 bg-neutral-50 p-3">
-      <label className="block text-sm font-medium text-neutral-700">Your note</label>
+      <label className="block text-sm font-medium text-neutral-700">{ui.itemNote.label}</label>
       <textarea
         value={body}
         onChange={(e) => setBody(e.target.value)}
         onBlur={save}
-        placeholder="Add a note..."
+        placeholder={ui.itemNote.placeholder}
         rows={3}
         className="mt-1 w-full rounded border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 placeholder-neutral-400"
         disabled={saving}
       />
-      {saving && <p className="mt-1 text-xs text-neutral-500">Saving...</p>}
+      {saving && <p className="mt-1 text-xs text-neutral-500">{ui.itemNote.saving}</p>}
     </div>
   );
 }

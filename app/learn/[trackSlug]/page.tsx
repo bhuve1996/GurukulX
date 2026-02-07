@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getDataAdapter } from "@/lib/data";
 import { notFound } from "next/navigation";
+import { ui } from "@/lib/config";
 
 export default async function TrackPage({
   params,
@@ -18,7 +19,7 @@ export default async function TrackPage({
     <div>
       <nav className="text-sm text-neutral-500">
         <Link href="/learn" className="hover:text-neutral-700">
-          Learn
+          {ui.nav.learn}
         </Link>
         <span className="mx-2">/</span>
         <span className="text-neutral-900">{track.name}</span>
@@ -38,7 +39,7 @@ export default async function TrackPage({
             >
               <span>{phase.name}</span>
               {phase.estimatedDays != null && (
-                <span className="text-sm font-normal text-neutral-500">~{phase.estimatedDays} days</span>
+                <span className="text-sm font-normal text-neutral-500">{ui.trackPage.days(phase.estimatedDays)}</span>
               )}
             </Link>
           </li>

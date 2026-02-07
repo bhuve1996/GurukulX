@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
+import { ui } from "@/lib/config";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "GurukulX",
-    short_name: "GurukulX",
-    description: "Learn AI — notes, shorts, quizzes, practice.",
+    name: ui.site.name,
+    short_name: ui.site.name,
+    description: ui.site.description,
     start_url: "/",
     display: "standalone",
     background_color: "#fafafa",
