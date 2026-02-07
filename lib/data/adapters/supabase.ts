@@ -6,6 +6,10 @@
 import { createClient } from "@supabase/supabase-js";
 import { config } from "@/lib/config";
 import type { DataAdapter, Track, Phase, Topic, ContentItem, UserNote, UserSave, TopicComment } from "@/lib/data/types";
+import type { Database } from "./supabase-database";
+
+// Supabase client is typed with Database, but .from(tableName) infers table from string
+// so upsert/insert still expect `never`. We cast payload to `never` to satisfy the overload.
 
 const TABLES = {
   tracks: "tracks",
@@ -18,12 +22,12 @@ const TABLES = {
   topicComments: "topic_comments",
 } as const;
 
-let clientInstance: ReturnType<typeof createClient> | null = null;
+let clientInstance: ReturnType<typeof createClient<Database>> | null = null;
 
 function getClient() {
   if (clientInstance) return clientInstance;
   const { url, anonKey } = config.supabase;
-  clientInstance = createClient(url, anonKey, {
+  clientInstance = createClient<Database>(url, anonKey, {
     global: {
       fetch: (url, init) => fetch(url, { ...init, cache: "no-store" }),
     },
@@ -141,9 +145,14 @@ const supabaseAdapter: DataAdapter = {
   },
   progress: {
     markDone: async (userId, itemId) => {
+      const row = {
+        user_id: userId,
+        item_id: itemId,
+        completed_at: new Date().toISOString(),
+      };
       const { error } = await getClient()
         .from(TABLES.userProgress)
-        .upsert({ user_id: userId, item_id: itemId, completed_at: new Date().toISOString() }, { onConflict: "user_id,item_id" });
+        .upsert(row as never, { onConflict: "user_id,item_id" });
       if (error) throw new Error(error.message);
     },
     listCompletedItemIds: async (userId, topicId) => {
@@ -186,17 +195,28 @@ const supabaseAdapter: DataAdapter = {
       return mapRow<UserNote>({ ...row, userId: row.user_id, itemId: row.item_id, updatedAt: row.updated_at });
     },
     upsert: async (userId, itemId, body) => {
+      const row = {
+        user_id: userId,
+        item_id: itemId,
+        body,
+        updated_at: new Date().toISOString(),
+      };
       const { error } = await getClient()
         .from(TABLES.userNotes)
-        .upsert({ user_id: userId, item_id: itemId, body, updated_at: new Date().toISOString() }, { onConflict: "user_id,item_id" });
+        .upsert(row as never, { onConflict: "user_id,item_id" });
       if (error) throw new Error(error.message);
     },
   },
   saves: {
     add: async (userId, itemId) => {
+      const row = {
+        user_id: userId,
+        item_id: itemId,
+        saved_at: new Date().toISOString(),
+      };
       const { error } = await getClient()
         .from(TABLES.userSaves)
-        .upsert({ user_id: userId, item_id: itemId, saved_at: new Date().toISOString() }, { onConflict: "user_id,item_id" });
+        .upsert(row as never, { onConflict: "user_id,item_id" });
       if (error) throw new Error(error.message);
     },
     remove: async (userId, itemId) => {
@@ -247,9 +267,10 @@ const supabaseAdapter: DataAdapter = {
       );
     },
     add: async (topicId, userId, body) => {
+      const insertRow = { topic_id: topicId, user_id: userId, body };
       const { data, error } = await getClient()
         .from(TABLES.topicComments)
-        .insert({ topic_id: topicId, user_id: userId, body })
+        .insert(insertRow as never)
         .select()
         .single();
       if (error) throw new Error(error.message);
