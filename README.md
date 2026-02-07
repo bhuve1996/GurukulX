@@ -25,6 +25,12 @@ Default data adapter is `memory` (no DB). To use Supabase:
    - `007_languages_table.sql` (languages table, optional)
    Add courses and content via **API** (`POST /api/courses`, etc.) or your own import.
 
+## Docs
+
+- **`docs/API.md`** — REST API for courses and languages.
+- **`docs/CONTENT-FORMAT.md`** — Expected structure of content (tracks, phases, topics, content items), JSON/card format, and word expectations for short notes vs full body so the whole course is understandable in depth.
+- **`docs/MULTIPLE-COURSES.md`** — Adding multiple courses (tracks).
+
 ## Switching database
 
 1. Implement a new adapter in `lib/data/adapters/<name>.ts` that satisfies `DataAdapter` in `lib/data/types.ts`.
